@@ -1,86 +1,20 @@
 <template>
     <div style="position: fixed; display: flex; width: 100%; height: 100%">
-        <el-container style="height: 100%; border: 1px solid #eee">
-            <div style="height: 100%;; border: 1px solid #eee">
-                <div style=" height:5%;">
-                    管理系统
-                </div>
-                <el-aside height="95%" width="200px" style="background-color: rgb(238, 241, 246)">
-                    <el-menu @open="handleOpen" @close="handleClose" @select="handleSelect" style="text-align: left">
-                        <el-submenu index="1">
-                            <template slot="title">
-                                <i class="el-icon-user"></i>
-                                <span>用户管理</span>
-                            </template>
-                            <el-submenu index="1-1">
-                                <template slot="title">
-                                    <i class="el-icon-s-custom"></i><span>用户信息</span></template>
-                                <el-menu-item index="/UserCreate">用户注册</el-menu-item>
-                                <el-menu-item index="/UserList">用户列表</el-menu-item>
-                            </el-submenu>
-                        </el-submenu>
-                        <el-submenu index="2">
-                            <template slot="title">
-                                <i class="el-icon-s-data"></i>
-                                <span>用户数据统计</span>
-                            </template>
-                            <el-submenu index="2-1">
-                                <template slot="title">
-                                    <i class="el-icon-s-custom"></i><span>用户信息</span></template>
-                                <el-menu-item index="/logincount">用户登录统计</el-menu-item>
-                            </el-submenu>
-                        </el-submenu>
-                        <el-submenu index="3">
-                            <template slot="title">
-                                <i class="el-icon-goods"></i>
-                                <span>商品管理</span>
-                            </template>
-                        </el-submenu>
-                        <el-submenu index="5">
-                            <template slot="title">
-                                <i class="el-icon-s-order"></i>
-                                <span>订单管理</span>
-                            </template>
-                            <el-submenu index="5-1">
-                                <template slot="title">
-                                    <i class="el-icon-mobile"></i><span>订单</span></template>
-                                <el-menu-item index="/OrderList">订单列表</el-menu-item>
-                                <el-menu-item index="/OrderListTwo">订单列表2</el-menu-item>
-                            </el-submenu>
-                        </el-submenu>
-                        <el-submenu index="4">
-                            <template slot="title">
-                                <i class="el-icon-location"></i>
-                                <span>个人中心</span>
-                            </template>
-                            <el-menu-item index="/UserPerfect">信息完善</el-menu-item>
-                            <!-- <el-submenu index="1-1">
-                            <template slot="title"> <i class="el-icon-location"></i><span>信息完善</span></template>
-                            <el-menu-item index="/LoginCount">用户登录统计</el-menu-item>
-
-                        </el-submenu> -->
-                        </el-submenu>
-                    </el-menu>
-                </el-aside>
-            </div>
-            <el-container>
-                <el-header style="text-align: right; font-size: 12px" width="100%">
-                    <el-menu round class="el-menu-demo" mode="horizontal" background-color="#545c64" text-color="#fff"
-                        active-text-color="#ffd04b">
-                        <el-menu-item index="1">处理中心</el-menu-item>
-                        <el-submenu index="2">
-                            <template slot="title">我的工作台</template>
-                        </el-submenu>
-                        <el-menu-item index="3" disabled>消息中心</el-menu-item>
-                        <el-menu-item index="4">订单管理</el-menu-item>
-
-                        <div class="block">
-                            <el-badge :value="12" class="item" style="margin-right: 40px">
+        <el-container>
+            <el-header>
+                <el-row :gutter="10">
+                    <el-col :span="12">
+                        <div style="text-align: left;">
+                            <span><b>权限管理系统</b></span>
+                        </div>
+                    </el-col>
+                    <el-col :span="12">
+                        <div class="block" style="text-align: right;">
+                            <!-- <el-badge :value="12" class="item" style="margin-right: 40px">
                                 <i class="el-icon-message" style="font-size: 30px"></i>
-                            </el-badge>
+                            </el-badge> -->
                             <el-dropdown>
-                                <el-avatar style="margin-top: 10px; margin-right: 10px" :size="40"
-                                    src="http://localhost:64812/img/bbe98a4b-4523-420c-bb8a-54dcf6a516f7.jpeg"></el-avatar>
+                                <el-avatar style="margin-top: 10px; margin-right: 10px" :size="40" src=""></el-avatar>
                                 <el-dropdown-menu slot="dropdown">
                                     <el-dropdown-item>查看</el-dropdown-item>
                                     <el-dropdown-item>新增</el-dropdown-item>
@@ -88,23 +22,40 @@
                                 </el-dropdown-menu>
                             </el-dropdown>
                         </div>
-                    </el-menu>
-                </el-header>
+                    </el-col>
+                </el-row>
+            </el-header>
 
-                <el-main>
-                    <RouterView></RouterView>
-                </el-main>
+
+            <el-container>
+                <el-aside style="width: 200px;">
+                    <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
+                        @select="handleSelect" active-text-color="#ffd04b">
+                        <el-submenu index="1">
+                            <template slot="title">
+                                <i class="el-icon-user"></i>
+                                <span>用户信息</span>
+                            </template>
+                            <el-menu-item index="/UserList">
+                                <i class="el-icon-user-solid"></i>用户信息
+                            </el-menu-item>
+                        </el-submenu>
+                    </el-menu>
+                </el-aside>
+                <div style=" width: calc(100% - 200px); height: 100%;">
+                    <router-view></router-view>
+                </div>
             </el-container>
         </el-container>
     </div>
 </template>
 <script>
+import { disConnect } from "echarts/core";
 import { RouterView } from "vue-router";
 export default {
-    name: 'APP',
+    name: "APP",
     data() {
-        return {
-        }
+        return {};
     },
     methods: {
         handleOpen(key, keyPath) {
@@ -116,6 +67,7 @@ export default {
         handleSelect(key, keyPath) {
             console.log(key, keyPath);
             this.show = false;
+            console.log(this.$router)
             this.$router.push({
                 path: key,
             });
@@ -125,6 +77,50 @@ export default {
     },
     mounted() {
     },
+    components: { disConnect }
 }
 </script>
-<style lang="scss" scoped></style>
+<style>
+.el-header,
+.el-footer {
+    background-color: #09ede6;
+    color: #333;
+    text-align: center;
+    line-height: 60px;
+}
+
+.el-aside {
+    color: #333;
+    text-align: center;
+    line-height: 200px;
+    text-align: left;
+}
+
+.el-main {
+    color: #333;
+    text-align: center;
+    line-height: 160px;
+}
+
+body>.el-container {
+    margin-bottom: 40px;
+}
+
+.el-container:nth-child(5) .el-aside,
+.el-container:nth-child(6) .el-aside {
+    line-height: 260px;
+}
+
+.el-container:nth-child(7) .el-aside {
+    line-height: 320px;
+}
+
+
+.el-menu-demo {
+    width: 100%;
+}
+
+.el-menu {
+    border: none;
+}
+</style>
