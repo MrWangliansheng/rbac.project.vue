@@ -5,19 +5,29 @@ import {
     Message
 } from 'element-ui';
 
-axios.defaults.baseURL = process.env.VUE_APP_BASEURL + "/api";
+axios.defaults.baseURL = "http://localhost:5000/api"
+
 axios.interceptors.request.use(function (config) {
-    debugger
+
     return config;
 }, function (error) {
     return Promise.reject(error);
 });
 
 axios.interceptors.response.use(function (response) {
-    debugger
+    // debugger
     const res = response.data;
-    return res;
-
+    if (res.result !== 200)
+    {
+        Message({
+            message: res.message || "Error",
+            type: "error",
+            duration:5*1000
+        })    
+        return Promise.reject(new Error(res.message||"Error"))
+    } else {
+        return res;
+    }
 }, function (error) {
     return Promise.reject(error);
 })

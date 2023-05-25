@@ -39,6 +39,9 @@
                             <el-menu-item index="/UserList">
                                 <i class="el-icon-user-solid"></i>用户信息
                             </el-menu-item>
+                            <el-menu-item index="/RoleList">
+                                <i class="el-icon-s-marketing"></i>角色信息
+                            </el-menu-item>
                         </el-submenu>
                     </el-menu>
                 </el-aside>

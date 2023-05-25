@@ -15,11 +15,19 @@ export function GetUserAll(data)
         data
     })
 }
-export function EditUser(data)
+export function UpdateUser(data)
 {
     return axios({
-        method: "get",
-        url: '/User/EditUser  ',
+        method: "put",
+        url: '/User/UpdateUser',
+        data
+    })
+}
+export function ResetPasswrod(data)
+{
+    return axios({
+        method: "put",
+        url: '/User/ResetUserPasswrod',
         data
     })
 }
