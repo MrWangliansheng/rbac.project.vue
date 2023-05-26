@@ -1,6 +1,10 @@
 <template>
     <div>
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+            <el-form-item label="上级" prop="roleParentId">
+                <el-cascader :options="treelist" v-model="parentid" :props="{ checkStrictly: true }" clearable
+                    @change="Level"></el-cascader>
+            </el-form-item>
             <el-form-item label="角色名称" prop="roleName">
                 <el-input v-model="ruleForm.roleName"></el-input>
             </el-form-item>
@@ -12,13 +16,16 @@
     </div>
 </template>
 <script>
-import { CreateRole } from "@/api/role"
+import { CreateRole, GetRoleTree } from "@/api/role"
 export default {
     name: 'APP',
     data() {
         return {
+            parentid: "",
+            treelist: [],
             ruleForm: {
                 roleName: '',
+                roleParentId: 0,
             },
             rules: {
                 roleName: [
@@ -31,6 +38,9 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
+                    let index = this.parentid.length;
+
+                    this.ruleForm.roleParentId = this.parentid[index - 1];
                     CreateRole(this.ruleForm).then(d => {
                         if (d.result == 200) {
                             this.$message.success(d.message);
@@ -49,9 +59,18 @@ export default {
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();
+        },
+        GetRoleTree() {
+            GetRoleTree().then(d => {
+                this.treelist = d.data;
+            })
+        },
+        Level(val) {
+            console.log(val)
         }
     },
     created() {
+        this.GetRoleTree();
     },
     mounted() {
     },

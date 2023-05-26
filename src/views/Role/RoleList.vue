@@ -1,6 +1,8 @@
 <template>
     <div>
-        <el-button @click="dialogFormVisible = true" size="small">添加</el-button>
+        <div style="text-align: right;">
+            <el-button @click="dialogFormVisible = true" type="success" size="small">添加</el-button>
+        </div>
         <el-table :data="rolelist" border style="width: 100%">
             <el-table-column fixed prop="roleName" label="角色名称"></el-table-column>
             <el-table-column fixed prop="roleName" label="角色名称">

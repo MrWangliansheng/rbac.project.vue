@@ -24,6 +24,11 @@ const routes = [
         path: '/RoleList',
         name: '/RoleList',
         component:()=>import("../views/Role/RoleList.vue"),
+      },
+      {
+        path: '/UserCreate',
+        name: '/UserCreate',
+        component:()=>import("../views/User/UserCreate.vue"),
       }
     ],
   },

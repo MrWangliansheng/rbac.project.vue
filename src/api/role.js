@@ -18,3 +18,11 @@ export function CreateRole(data)
         data
     })
 }
+export function GetRoleTree(data)
+{
+    return axios({
+        method: "get",
+        url: '/Role/GetRoleTree',
+        data
+    })
+}

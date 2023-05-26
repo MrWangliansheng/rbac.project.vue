@@ -5,7 +5,7 @@ import {
     Message
 } from 'element-ui';
 
-axios.defaults.baseURL = "http://localhost:5000/api"
+axios.defaults.baseURL = process.env.VUE_APP_BASEURL+"/api"
 
 axios.interceptors.request.use(function (config) {
 
@@ -15,7 +15,7 @@ axios.interceptors.request.use(function (config) {
 });
 
 axios.interceptors.response.use(function (response) {
-    // debugger
+    debugger
     const res = response.data;
     if (res.result !== 200)
     {
@@ -29,7 +29,7 @@ axios.interceptors.response.use(function (response) {
         return res;
     }
 }, function (error) {
-    return Promise.reject(error);
+    console.log(error)
 })
 
 export default axios;
