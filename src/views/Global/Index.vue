@@ -42,6 +42,9 @@
                             <el-menu-item index="/RoleList">
                                 <i class="el-icon-s-marketing"></i>角色信息
                             </el-menu-item>
+                            <el-menu-item index="/PowerList">
+                                <i class="el-icon-s-marketing"></i>权限列表
+                            </el-menu-item>
                         </el-submenu>
                     </el-menu>
                 </el-aside>
@@ -58,7 +61,10 @@ import { RouterView } from "vue-router";
 export default {
     name: "APP",
     data() {
-        return {};
+        return {
+            url: "",
+        };
+
     },
     methods: {
         handleOpen(key, keyPath) {
@@ -71,12 +77,17 @@ export default {
             console.log(key, keyPath);
             this.show = false;
             console.log(this.$router)
+            if (this.url == key) {
+                return;
+            }
+            this.url = key;
             this.$router.push({
                 path: key,
             });
         },
     },
     created() {
+        this.url = this.$route.fullPath;
     },
     mounted() {
     },

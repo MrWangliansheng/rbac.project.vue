@@ -8,25 +8,17 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12" :offset="0">
+                    <el-form-item label="真实姓名" prop="fullName">
+                        <el-input v-model="ruleForm.fullName"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row :gutter="24">
+                <el-col :span="12" :offset="0">
                     <el-form-item label="邮箱" prop="userEmail">
                         <el-input v-model="ruleForm.userEmail"></el-input>
                     </el-form-item>
                 </el-col>
-            </el-row>
-            <el-row :gutter="24">
-                <el-col :span="12" :offset="0">
-                    <el-form-item label="密码" prop="userPasswrod">
-                        <el-input v-model="ruleForm.userPasswrod"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12" :offset="0">
-                    <el-form-item label="确认密码" prop="userPasswrods">
-                        <el-input v-model="ruleForm.userPasswrods"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-
-            <el-row :gutter="24">
                 <el-col :span="12" :offset="0">
                     <el-form-item label="状态" prop="userState">
                         <el-radio-group v-model="ruleForm.userState">
@@ -35,16 +27,30 @@
                         </el-radio-group>
                     </el-form-item>
                 </el-col>
-                <el-col :span="12" :offset="0">
-                    <el-form-item label="角色" prop="roleParentId">
-                        <el-cascader :options="treelist" v-model="parentid" :props="{ checkStrictly: true }"
-                            clearable></el-cascader>
-                    </el-form-item>
-                </el-col>
             </el-row>
             <el-row :gutter="24">
                 <el-col :span="12" :offset="0">
-                    <el-form-item label="头像" prop="roleParentId">
+                    <el-form-item label="密码" prop="userPassword">
+                        <el-input show-password v-model="ruleForm.userPassword"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12" :offset="0">
+                    <el-form-item label="确认密码" prop="userPasswords">
+                        <el-input show-password v-model="ruleForm.userPasswords"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+
+
+            <el-row :gutter="24">
+                <el-col :span="12" :offset="0">
+                    <el-form-item label="角色" prop="roleId">
+                        <el-cascader :options="treelist" @change="value" :props="{ multiple: true, checkStrictly: true }"
+                            clearable></el-cascader>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12" :offset="0">
+                    <el-form-item label="头像" prop="userImg">
                         <el-upload class="avatar-uploader" action="http://localhost:5000/api/File/ImgUp"
                             :show-file-list="false" :on-success="handleAvatarSuccess">
                             <img v-if="ruleForm.userImg" :src="'http://localhost:5000/img/' + ruleForm.userImg"
@@ -53,26 +59,27 @@
                         </el-upload>
                     </el-form-item>
                 </el-col>
-                <el-col :span="12" :offset="0">
-
-                </el-col>
             </el-row>
             <el-row :gutter="24">
                 <el-col :span="24" :offset="0">
-                    <div style="border: 1px solid #ccc;width: 100%;height: 200px;;">
-                        <Toolbar style="border-bottom: 1px solid #ccc" :editor="editor" :defaultConfig="toolbarConfig"
-                            :mode="mode" />
-                        <Editor style="height: 500px; overflow-y: hidden;" v-model="ruleForm.userDesc"
-                            :defaultConfig="editorConfig" :mode="mode" @onCreated="onCreated" />
-                    </div>
+                    <el-form-item label="简介" prop="userDesc">
+                        <div style="border: 1px solid #ccc;width: 100%;">
+                            <Toolbar style="border-bottom: 1px solid #ccc" :editor="editor" :defaultConfig="toolbarConfig"
+                                :mode="mode" />
+                            <Editor style="height: 500px; overflow-y: hidden;" v-model="ruleForm.userDesc"
+                                :defaultConfig="editorConfig" :mode="mode" @onCreated="onCreated" />
+                        </div>
+                    </el-form-item>
                 </el-col>
             </el-row>
-
-            <el-form-item>
-                <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-                <el-button @click="resetForm('ruleForm')">重置</el-button>
-            </el-form-item>
+            <div style="margin: 0 auto;width: 400px;">
+                <el-form-item>
+                    <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+                    <el-button @click="resetForm('ruleForm')">重置</el-button>
+                </el-form-item>
+            </div>
         </el-form>
+
     </div>
 </template>
 <script>
@@ -84,6 +91,26 @@ export default Vue.extend({
     components: { Editor, Toolbar },
     name: 'APP',
     data() {
+        var validatePass = (rule, value, callback) => {
+            debugger
+            if (value === '') {
+                callback(new Error('请输入密码'));
+            } else {
+                if (this.ruleForm.userPassword !== '') {
+                    this.$refs.ruleForm.validateField('checkPass');
+                }
+                callback();
+            }
+        };
+        var validatePass2 = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请再次输入密码'));
+            } else if (value !== this.ruleForm.userPassword) {
+                callback(new Error('两次输入密码不一致!'));
+            } else {
+                callback();
+            }
+        };
         return {
             //富文本编译器变量
             editor: null,
@@ -96,24 +123,44 @@ export default Vue.extend({
             parentid: "",
             ruleForm: {
                 userName: '',
+                fullName: "",
                 userEmail: '',
-                userPasswrod: '',
-                userPasswrods: '',
+                userPassword: '',
+                userPasswords: '',
                 userState: '',
                 userImg: "",
                 userDesc: "",
+                lastLoginIP: ":IP",
+                roleId: [],
             },
             rules: {
-                name: [
-                    { required: true, message: '请输入活动名称', trigger: 'blur' },
-                    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                userName: [
+                    { required: true, message: '请输入用户名', trigger: 'blur' }
                 ],
-                region: [
-                    { required: true, message: '请选择活动区域', trigger: 'change' }
+                fullName: [
+                    { required: true, message: '请输入真实姓名', trigger: 'blur' }
                 ],
-                resource: [
-                    { required: true, message: '请选择活动资源', trigger: 'change' }
-                ]
+                roleId: [
+                    { required: true, message: '请选择角色', trigger: 'change' }
+                ],
+                userState: [
+                    { required: true, message: '请选择用户状态', trigger: 'change' }
+                ],
+                userEmail: [
+                    { required: true, message: '请输入邮箱', trigger: 'blur' }
+                ],
+                userPassword: [
+                    { required: true, validator: validatePass, trigger: 'blur' }
+                ],
+                userPasswords: [
+                    { required: true, validator: validatePass2, trigger: 'blur' }
+                ],
+                userImg: [
+                    { required: true, message: '上传用户头像', trigger: 'change' }
+                ],
+                userDesc: [
+                    { required: true, message: '请添加用户描述', trigger: 'blur' }
+                ],
             }
         }
     },
@@ -162,6 +209,16 @@ export default Vue.extend({
         onCreated(editor) {
             this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
         },
+        value(val) {
+            // this.ruleForm.roleId = [];
+            // console.log(val)
+            val.forEach(item => {
+                var index = item.length;
+                // console.log(index)
+                this.ruleForm.roleId.push(item[index - 1])
+            })
+            console.log(this.ruleForm.roleId)
+        }
     },
     created() {
         this.GetRoleTree();

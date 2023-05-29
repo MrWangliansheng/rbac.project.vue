@@ -15,9 +15,9 @@ axios.interceptors.request.use(function (config) {
 });
 
 axios.interceptors.response.use(function (response) {
-    debugger
+    // debugger
     const res = response.data;
-    if (res.result !== 200)
+    if (res.result === 500)
     {
         Message({
             message: res.message || "Error",

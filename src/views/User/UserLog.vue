@@ -14,11 +14,13 @@
                             <el-input v-model="ruleForm.pwd" show-password></el-input>
                         </el-form-item>
                         <el-form-item label="验证码" prop="code">
-                            <el-col :span="12">
-                                <el-input v-model="ruleForm.code"></el-input>
-                            </el-col>
-                            <el-col :span="8" :offset="2">
-
+                            <el-col :span="24">
+                                <el-input v-model="ruleForm.code">
+                                    <template slot="append"> <img id="Code" width="60" height="35px"
+                                            style="margin-left: 5px;cursor: pointer;" @click="GetCode" title="看不清,换一张"
+                                            :src="'http://localhost:5000/api/AuthCode/UserCode?guid=' + ruleForm.guid"
+                                            alt="" /></template>
+                                </el-input>
                             </el-col>
                         </el-form-item>
                         <el-form-item>
@@ -38,10 +40,12 @@ export default {
     name: "RbacProjectUiLogin",
     data() {
         return {
+
             ruleForm: {
                 name: "",
                 pwd: "",
                 code: "",
+                guid: "",
             },
             rules: {
                 name: [{ required: true, message: "请输x入用户名", trigger: "blur" }],
@@ -55,13 +59,16 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     UserLogin(this.ruleForm).then(d => {
-                        if (d.message == "登陆成功") {
-                            this.$message.success("登陆成功");
+
+                        if (d.result == 200) {
+                            this.$message.success(d.message);
                             this.$router.push({
                                 path: "/Index",
                             });
+                        } else if (d.result == 100) {
+                            this.$message.warning(d.message);
                         } else {
-                            this.$message.error("用户名或密码错误或用户不存在");
+                            this.$message.error(d.message);
                         }
                     })
                 } else {
@@ -73,8 +80,21 @@ export default {
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },
+        GUID() {
+            return ((1 + Math.random()) * 0x100000 | 0).toString(16).substring(1);
+        },
+        GetGuid() {
+            let guid = this.GUID() + "-" + this.GUID() + "-" + this.GUID() + "-" + this.GUID() + "-" + this.GUID();
+            this.ruleForm.guid = guid;
+        },
+        GetCode() {
+
+            document.getElementById("Code").src = "http://localhost:5000/api/AuthCode/UserCode?guid=" + this.ruleForm.guid;
+        }
     },
-    created() { },
+    created() {
+        this.GetGuid();
+    },
     mounted() { },
 };
 </script>

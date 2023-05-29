@@ -10,7 +10,7 @@ export function UserLogin(data) {
 //用户信息分页
 export function GetUserInfoPage(dto)
 {
-    debugger
+    
     return axios.get('/User/GetUserInfoPage', {
         params: dto
     })

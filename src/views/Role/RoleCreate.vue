@@ -1,13 +1,28 @@
 <template>
     <div>
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="上级" prop="roleParentId">
-                <el-cascader :options="treelist" v-model="parentid" :props="{ checkStrictly: true }" clearable
-                    @change="Level"></el-cascader>
-            </el-form-item>
-            <el-form-item label="角色名称" prop="roleName">
-                <el-input v-model="ruleForm.roleName"></el-input>
-            </el-form-item>
+            <el-row :gutter="20">
+                <el-col :span="12" :offset="0">
+                    <el-form-item label="上级" prop="roleParentId">
+                        <el-cascader :options="treelist" v-model="parentid" :props="{ checkStrictly: true }"
+                            clearable></el-cascader>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12" :offset="0">
+                    <el-form-item label="角色名称" prop="roleName">
+                        <el-input v-model="ruleForm.roleName"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="24" :offset="0">
+                    <el-form-item label="权限菜单" prop="roleId">
+                        <el-cascader :options="prowlist" @change="GetValue" :props="{ multiple: true, checkStrictly: true }"
+                            clearable></el-cascader>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+
             <el-form-item>
                 <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
                 <el-button @click="resetForm('ruleForm')">重置</el-button>
@@ -17,15 +32,18 @@
 </template>
 <script>
 import { CreateRole, GetRoleTree } from "@/api/role"
+import { GetPowerTree } from "@/api/power";
 export default {
     name: 'APP',
     data() {
         return {
             parentid: "",
             treelist: [],
+            prowlist: [],
             ruleForm: {
                 roleName: '',
                 roleParentId: 0,
+                roleParentIdAll: '',
             },
             rules: {
                 roleName: [
@@ -41,6 +59,7 @@ export default {
                     let index = this.parentid.length;
 
                     this.ruleForm.roleParentId = this.parentid[index - 1];
+                    this.ruleForm.roleParentIdAll = this.parentid.toString();
                     CreateRole(this.ruleForm).then(d => {
                         if (d.result == 200) {
                             this.$message.success(d.message);
@@ -65,12 +84,18 @@ export default {
                 this.treelist = d.data;
             })
         },
-        Level(val) {
+        GetPowerTreeList() {
+            GetPowerTree().then(d => {
+                this.prowlist = d.data;
+            })
+        },
+        GetValue(val) {
             console.log(val)
-        }
+        },
     },
     created() {
         this.GetRoleTree();
+        this.GetPowerTreeList();
     },
     mounted() {
     },

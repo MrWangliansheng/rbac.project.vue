@@ -26,9 +26,9 @@ const routes = [
         component:()=>import("../views/Role/RoleList.vue"),
       },
       {
-        path: '/UserCreate',
-        name: '/UserCreate',
-        component:()=>import("../views/User/UserCreate.vue"),
+        path: '/PowerList',
+        name: '/PowerList',
+        component:()=>import("../views/Power/PowerList.vue"),
       }
     ],
   },

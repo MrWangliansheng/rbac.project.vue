@@ -18,7 +18,7 @@
     </div>
 
     <div>
-      <el-table border :data="userlist" style="width: 100%">
+      <el-table border :data="userlist" width="100%" max-height="500">
         <el-table-column prop="userName" label="登录名"></el-table-column>
         <el-table-column prop="userEmail" label="用户邮箱">
           <template slot-scope="scope">
@@ -92,7 +92,8 @@
       </el-dialog>
     </div>
     <div style="width: 90%;">
-      <el-dialog title="用户添加" :visible.sync="CreateVisible" :modal="false">
+      <el-dialog title="用户添加" :visible.sync="CreateVisible" :modal="false" :fullscreen="false"
+        :close-on-click-modal="false" :destroy-on-close="true">
         <UserCreate @Create="Visible"></UserCreate>
       </el-dialog>
     </div>
@@ -103,6 +104,7 @@ import { GetUserInfoPage, EditUser, LogicDeleteUserAsync } from '@/api/admin';
 import UserEdit from "@/views/User/UserEdit.vue"
 import UserResetPasswrod from "@/views/User/UserResetPasswrod.vue"
 import UserCreate from "@/views/User/UserCreate.vue"
+import { Result } from 'element-ui';
 export default {
   components: {
     UserEdit,
@@ -127,10 +129,14 @@ export default {
         total: 0,
         pagecount: 0,
       },
+      form: {
+        id: 123,
+      }
     };
   },
   methods: {
     GetUserList() {
+      console.log(Object.assign({}, this.page, this.form))
       GetUserInfoPage(this.page).then(d => {
         this.userlist = d.data;
         this.page.total = d.total;
