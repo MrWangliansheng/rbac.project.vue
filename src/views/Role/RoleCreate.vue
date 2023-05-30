@@ -44,10 +44,14 @@ export default {
                 roleName: '',
                 roleParentId: 0,
                 roleParentIdAll: '',
+                roleId: [],
             },
             rules: {
                 roleName: [
                     { required: true, message: '请输入活动名称', trigger: 'blur' }
+                ],
+                roleId: [
+                    { required: true, message: '请选择权限菜单', trigger: 'change' }
                 ]
             }
         }
@@ -90,7 +94,12 @@ export default {
             })
         },
         GetValue(val) {
+            this.ruleForm.roleId = [];
             console.log(val)
+            val.forEach(item => {
+                let index = item.length;
+                this.ruleForm.roleId.push(item[index - 1]);
+            })
         },
     },
     created() {

@@ -48,7 +48,7 @@ export default {
                 guid: "",
             },
             rules: {
-                name: [{ required: true, message: "请输x入用户名", trigger: "blur" }],
+                name: [{ required: true, message: "请输入用户名", trigger: "blur" }],
                 pwd: [{ required: true, message: "请输入密码", trigger: "blur" }],
                 code: [{ required: true, message: "请输入验证码", trigger: "blur" }],
             },
@@ -62,7 +62,12 @@ export default {
 
                         if (d.result == 200) {
                             this.$message.success(d.message);
-                            localStorage.setItem("token", d.key)
+                            // localStorage.setItem("token", d.key)
+                            this.$ls.set("token", d.key);
+                            this.$session.set("username", this.ruleForm.name)
+                            console.log(this.ruleForm.name);
+                            // this.$session.get("username")
+                            console.log(this.$session.get("username"));
                             this.$router.push({
                                 path: "/Index",
                             });

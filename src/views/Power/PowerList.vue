@@ -41,6 +41,8 @@ export default {
         GetPowerTreeTableLevel() {
             GetPowerTreeTableLevelone(0).then(d => {
                 this.powerlist = d.data;
+            }).catch(err => {
+                console.log(err);
             })
         },
         load(tree, treeNode, resolve) {

@@ -10,9 +10,15 @@
                     </el-col>
                     <el-col :span="12">
                         <div class="block" style="text-align: right;">
-                            <!-- <el-badge :value="12" class="item" style="margin-right: 40px">
+                            <el-badge :value="12" class="item" style="margin-right: 40px">
                                 <i class="el-icon-message" style="font-size: 30px"></i>
-                            </el-badge> -->
+                            </el-badge>
+                            <el-dropdown class="block" style="text-align: right;" @command="logout">
+                                <i class="el-icon-setting" style="font-size: 30px"></i>
+                                <el-dropdown-menu slot="dropdown">
+                                    <el-dropdown-item>退出登录</el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
                             <el-dropdown>
                                 <el-avatar style="margin-top: 10px; margin-right: 10px" :size="40" src=""></el-avatar>
                                 <el-dropdown-menu slot="dropdown">
@@ -56,13 +62,13 @@
     </div>
 </template>
 <script>
-import { disConnect } from "echarts/core";
 import { RouterView } from "vue-router";
 export default {
     name: "APP",
     data() {
         return {
             url: "",
+            log: 0,
         };
 
     },
@@ -85,13 +91,22 @@ export default {
                 path: key,
             });
         },
+        logout() {
+            this.$ls.remove("token");
+            this.$router.push({
+                path: '/'
+            })
+        }
+
     },
     created() {
         this.url = this.$route.fullPath;
     },
     mounted() {
     },
-    components: { disConnect }
+    watch: {
+
+    }
 }
 </script>
 <style>

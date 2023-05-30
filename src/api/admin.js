@@ -1,10 +1,10 @@
 import axios from "../utils/request";
 //用户登录
-export function UserLogin(data) {
+export function UserLogin(params) {
     return axios({
-        method: "post",
+        method: "get",
         url: '/User/UserLog',
-        data
+        params
     })
 }
 //用户信息分页
@@ -12,6 +12,8 @@ export function GetUserInfoPage(dto) {
 
     return axios.get('/User/GetUserInfoPage', {
         params: dto
+    }).catch(err => {
+        console.log(err)
     })
 }
 //修改用户信息
@@ -28,6 +30,8 @@ export function ResetPasswrod(data) {
         method: "put",
         url: '/User/ResetUserPasswrod',
         data
+    }).catch(err => {
+        console.log(err)
     })
 }
 //逻辑删除用户信息
@@ -37,4 +41,8 @@ export function LogicDeleteUserAsync(id) {
 //创建用户信息
 export function CreateUserAsync(data) {
     return axios.post("/User/CreateUser", data)
+}
+
+export function GetUserName(name) {
+    return axios.get("/User/GetUserName?name=" + name)
 }

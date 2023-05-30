@@ -77,24 +77,27 @@
     </div>
     <div class="block" style="margin: 0 auto;width: 500px;">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.pageindex"
-        :page-sizes="[2, 4, 6, 8]" :page-size="page.pagesize" layout="total, sizes, prev, pager, next, jumper"
+        :page-sizes="[6, 12, 18, 24]" :page-size="page.pagesize" layout="total, sizes, prev, pager, next, jumper"
         :total="page.total">
       </el-pagination>
     </div>
     <div style="width: 90%;">
-      <el-dialog title="修改用户信息" :visible.sync="dialogFormVisible" :modal="false">
-        <UserEdit :id="UserId" :key="new Date().getTime()" @dialogFormVisible="Visible"></UserEdit>
+      <el-dialog title="修改用户信息" :visible.sync="dialogFormVisible" :modal="false" @closed="CloseDialog">
+        <UserEdit :id="UserId" :key="new Date().getTime()" v-if="dialogFormVisible" @dialogFormVisible="Visible">
+        </UserEdit>
       </el-dialog>
     </div>
     <div style="width: 90%;">
       <el-dialog title="重置用户密码" :visible.sync="Reset" :modal="false">
-        <UserResetPasswrod :id="ResetId" :key="new Date().getTime()" @ResetPasswrod="Visible"></UserResetPasswrod>
+        <UserResetPasswrod :id="ResetId" :key="new Date().getTime()" v-if="Reset" @ResetPasswrod="Visible">
+        </UserResetPasswrod>
       </el-dialog>
     </div>
     <div style="width: 90%;">
       <el-dialog title="用户添加" :visible.sync="CreateVisible" :modal="false" :fullscreen="false"
         :close-on-click-modal="false" :destroy-on-close="true">
-        <UserCreate @Create="Visible"></UserCreate>
+        <UserCreate @Create="Visible" :key="new Date().getTime()" v-if="CreateVisible" @CreateVisible="Visible">
+        </UserCreate>
       </el-dialog>
     </div>
   </div>
@@ -124,7 +127,7 @@ export default {
       ResetId: "",
       page: {
         pageindex: 1,
-        pagesize: 2,
+        pagesize: 6,
         total: 0,
         pagecount: 0,
       },
@@ -135,13 +138,14 @@ export default {
   },
   methods: {
     GetUserList() {
-      console.log(Object.assign({}, this.page, this.form))
+      // console.log(Object.assign({}, this.page, this.form))
       GetUserInfoPage(this.page).then(d => {
-        debugger
+        // debugger
         this.userlist = d.data;
         this.page.total = d.total;
-        this.page.pagecount = d.pagecount;
-      })
+      }).catch(err => {
+        console.log(err);
+      });
     },
     Reload() {
       location.reload();
@@ -168,6 +172,9 @@ export default {
       LogicDeleteUserAsync(id).then(d => {
         this.$message.success(d.message)
       })
+    },
+    CloseDialog(val) {
+      this.dialogFormVisible = false;
     }
   },
   created() {

@@ -5,7 +5,7 @@
         </div>
         <el-table :data="rolelist" border style="width: 100%">
             <el-table-column fixed prop="roleName" label="角色名称"></el-table-column>
-            <el-table-column fixed prop="roleName" label="角色名称">
+            <el-table-column fixed prop="roleName" label="添加日期">
                 <template slot-scope="scope">
                     {{ scope.row.roleCreateTime.replace("T", " ") }}
                 </template>
@@ -30,7 +30,7 @@
     </div>
 </template>
 <script>
-import { GetRoleAll } from "@/api/role"
+import { GetRoleAll, LogicDeleteAsyncRole } from "@/api/role"
 import RoleCreate from "@/views/Role/RoleCreate.vue"
 export default {
     components: {
@@ -54,6 +54,8 @@ export default {
         GetRole() {
             GetRoleAll(Object.assign({}, this.page)).then(d => {
                 this.rolelist = d.data;
+            }).catch(err => {
+                console.log(err);
             })
         },
         Visible(val) {
@@ -61,7 +63,26 @@ export default {
             location.reload();
         },
         DeleteRole(id) {
-
+            LogicDeleteAsyncRole(id).then(d => {
+                if (d.result == 200) {
+                    this.$message.success(d.message);
+                    this.GetRole();
+                } else if (d.result == 100) {
+                    this.$message.warning(d.message);
+                } else {
+                    this.$message.error(d.message);
+                }
+            })
+        },
+        handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
+            this.page.pagesize = val;
+            this.GetRole();
+        },
+        handleCurrentChange(val) {
+            console.log(`当前页: ${val}`);
+            this.page.pageindex = val;
+            this.GetRole();
         }
     },
     created() {

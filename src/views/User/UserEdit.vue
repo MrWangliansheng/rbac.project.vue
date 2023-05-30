@@ -64,7 +64,7 @@
 <script>
 import { GetRoleTree } from "@/api/role";
 import axios from "@/utils/request";
-import { UpdateUser } from "@/api/admin"
+import { UpdateUser, GetUserName } from "@/api/admin"
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
 import Vue from 'vue'
 export default Vue.extend({
@@ -74,6 +74,20 @@ export default Vue.extend({
     },
     name: 'APP',
     data() {
+        var Nameduplication = (rule, value, callback) => {
+            if (!value) {
+                return callback(new Error('用户名不可为空'));
+            }
+            setTimeout(() => {
+                GetUserName(value).then(d => {
+                    if (d.result == 200) {
+                        callback();
+                    } else {
+                        callback(new Error('用户名已存在'));
+                    }
+                })
+            }, 1000);
+        };
         return {
             //富文本编译器变量
             editor: null,
@@ -97,7 +111,7 @@ export default Vue.extend({
             },
             rules: {
                 userName: [
-                    { required: true, message: '请输入用户名', trigger: 'blur' }
+                    { required: true, validator: Nameduplication, trigger: 'blur' }
                 ],
                 fullName: [
                     { required: true, message: '请输入真实姓名', trigger: 'blur' }
@@ -155,6 +169,7 @@ export default Vue.extend({
                             this.$message.success(d.message);
                             setTimeout(() => {
                                 this.$emit("dialogFormVisible", false)
+                                this.editor = null;
                             }, 1000)
 
                         } else {
@@ -204,7 +219,12 @@ export default Vue.extend({
         const editor = this.editor
         if (editor == null) return
         editor.destroy() // 组件销毁时，及时销毁编辑器
-    }
+    },
+    watch: {
+        ruleForm: function (val) {
+            console.log(val);
+        }
+    },
 })
 </script>
 <style src="@wangeditor/editor/dist/css/style.css"></style>

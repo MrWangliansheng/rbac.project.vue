@@ -8,8 +8,8 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12" :offset="0">
-                    <el-form-item label="真实姓名" prop="fullName">
-                        <el-input v-model="ruleForm.fullName"></el-input>
+                    <el-form-item label="真实姓名" prop="pullName">
+                        <el-input v-model="ruleForm.pullName"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -123,7 +123,7 @@ export default Vue.extend({
             parentid: "",
             ruleForm: {
                 userName: '',
-                fullName: "",
+                pullName: "",
                 userEmail: '',
                 userPassword: '',
                 userPasswords: '',
@@ -137,7 +137,7 @@ export default Vue.extend({
                 userName: [
                     { required: true, message: '请输入用户名', trigger: 'blur' }
                 ],
-                fullName: [
+                pullName: [
                     { required: true, message: '请输入真实姓名', trigger: 'blur' }
                 ],
                 roleId: [
@@ -186,6 +186,9 @@ export default Vue.extend({
                     CreateUserAsync(this.ruleForm).then(d => {
                         if (d.result == 200) {
                             this.$message.success(d.message)
+                            setTimeout(() => {
+                                this.$emit("CreateVisible", false)
+                            }, 1000)
                         } else if (d.result == 100) {
                             this.$message.warning(d.message);
                         } else {
