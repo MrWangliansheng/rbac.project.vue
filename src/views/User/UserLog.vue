@@ -62,6 +62,7 @@ export default {
 
                         if (d.result == 200) {
                             this.$message.success(d.message);
+                            localStorage.setItem("token", d.key)
                             this.$router.push({
                                 path: "/Index",
                             });
@@ -88,7 +89,8 @@ export default {
             this.ruleForm.guid = guid;
         },
         GetCode() {
-
+            let guid = this.GUID() + "-" + this.GUID() + "-" + this.GUID() + "-" + this.GUID() + "-" + this.GUID();
+            this.ruleForm.guid = guid;
             document.getElementById("Code").src = "http://localhost:5000/api/AuthCode/UserCode?guid=" + this.ruleForm.guid;
         }
     },

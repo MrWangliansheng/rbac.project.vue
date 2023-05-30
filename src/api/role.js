@@ -1,12 +1,12 @@
 import axios from "@/utils/request"
 
-export function GetRoleAll(data)
+export function GetRoleAll(params)
 {
     debugger
     return axios({
         method: "get",
         url: '/Role/GetRole',
-        data
+        params
     })
 }
 

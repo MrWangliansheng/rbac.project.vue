@@ -8,16 +8,14 @@ export function UserLogin(data) {
     })
 }
 //用户信息分页
-export function GetUserInfoPage(dto)
-{
-    
+export function GetUserInfoPage(dto) {
+
     return axios.get('/User/GetUserInfoPage', {
         params: dto
     })
 }
 //修改用户信息
-export function UpdateUser(data)
-{
+export function UpdateUser(data) {
     return axios({
         method: "put",
         url: '/User/UpdateUser',
@@ -25,8 +23,7 @@ export function UpdateUser(data)
     })
 }
 //重置密码
-export function ResetPasswrod(data)
-{
+export function ResetPasswrod(data) {
     return axios({
         method: "put",
         url: '/User/ResetUserPasswrod',
@@ -34,12 +31,10 @@ export function ResetPasswrod(data)
     })
 }
 //逻辑删除用户信息
-export function LogicDeleteUserAsync(id)
-{
-    return axios.delete('/User/LogicDeleteAsyncUser?id='+id)
+export function LogicDeleteUserAsync(id) {
+    return axios.delete('/User/LogicDeleteAsyncUser?id=' + id)
 }
 //创建用户信息
-export function CreateUserAsync(data)
-{
-    return axios.post("/User/CreateUser",data)
+export function CreateUserAsync(data) {
+    return axios.post("/User/CreateUser", data)
 }

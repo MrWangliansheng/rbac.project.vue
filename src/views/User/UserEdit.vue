@@ -29,7 +29,7 @@
                 </el-col>
                 <el-col :span="7">
                     <el-form-item label="角色" prop="roleId">
-                        <el-cascader :options="treelist" v-model="ruleForm.roleId" @change="value"
+                        <el-cascader :options="treelist" v-model="roleId" @change="GetValue"
                             :props="{ multiple: true, checkStrictly: true }" clearable></el-cascader>
                     </el-form-item>
                 </el-col>
@@ -80,7 +80,7 @@ export default Vue.extend({
             toolbarConfig: {},
             editorConfig: { placeholder: '请输入内容...' },
             mode: 'default', // or 'simple'
-
+            roleId: [],
 
             treelist: [],
             ruleForm: {
@@ -137,7 +137,6 @@ export default Vue.extend({
             this.ruleForm.userImg = res.message;
         },
         EditUser(id) {
-            debugger
             console.log(id);
             axios({
                 method: "get",
@@ -179,13 +178,25 @@ export default Vue.extend({
         onCreated(editor) {
             this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
         },
-        value(val) {
+        GetValue(val) {
+            this.ruleForm.roleId = [];
+            console.log(val);
+            debugger
+            val.forEach(item => {
+                // item.forEach(item1 => {
+                //     debugger
+                // })
+                var index = item.length;
+                this.ruleForm.roleId.push(item[index - 1])
+                console.log(item);
+            })
             console.log(this.ruleForm.roleId);
         }
     },
     created() {
         this.EditUser(this.id);
         this.GetRoleTree();
+        this.mode = "asokdjhoak";
     },
     mounted() {
     },

@@ -104,7 +104,6 @@ import { GetUserInfoPage, EditUser, LogicDeleteUserAsync } from '@/api/admin';
 import UserEdit from "@/views/User/UserEdit.vue"
 import UserResetPasswrod from "@/views/User/UserResetPasswrod.vue"
 import UserCreate from "@/views/User/UserCreate.vue"
-import { Result } from 'element-ui';
 export default {
   components: {
     UserEdit,
@@ -138,6 +137,7 @@ export default {
     GetUserList() {
       console.log(Object.assign({}, this.page, this.form))
       GetUserInfoPage(this.page).then(d => {
+        debugger
         this.userlist = d.data;
         this.page.total = d.total;
         this.page.pagecount = d.pagecount;
@@ -163,6 +163,8 @@ export default {
       this.GetUserList();
     },
     LogicDeleteUser(id) {
+
+      console.log(this.userlist)
       LogicDeleteUserAsync(id).then(d => {
         this.$message.success(d.message)
       })

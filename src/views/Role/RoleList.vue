@@ -16,6 +16,12 @@
                 </template>
             </el-table-column>
         </el-table>
+        <div class="block" style="margin: 0 auto;width: 500px;">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                :current-page="page.pageindex" :page-sizes="[2, 4, 6, 8]" :page-size="page.pagesize"
+                layout="total, sizes, prev, pager, next, jumper" :total="page.total">
+            </el-pagination>
+        </div>
         <div>
             <el-dialog title="添加角色信息" :visible.sync="dialogFormVisible" :modal="false">
                 <RoleCreate :key="new Date().getTime()" @dialogFormVisible="Visible"></RoleCreate>
@@ -35,12 +41,18 @@ export default {
         return {
             roleid: "",
             rolelist: [],
-            dialogFormVisible: false
+            dialogFormVisible: false,
+            page: {
+                pageindex: 1,
+                pagesize: 6,
+                total: 0,
+                pagecount: 0,
+            }
         }
     },
     methods: {
         GetRole() {
-            GetRoleAll().then(d => {
+            GetRoleAll(Object.assign({}, this.page)).then(d => {
                 this.rolelist = d.data;
             })
         },
