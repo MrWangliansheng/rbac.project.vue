@@ -9,8 +9,8 @@
                 </el-col>
                 <el-col :span="12" :offset="0">
                     <el-form-item label="上级菜单" prop="powerParentId">
-                        <el-cascader :options="powerlist" v-model="ruleForm.powerParentId" :disabled="disbales == 1"
-                            :props="{ checkStrictly: true }" clearable></el-cascader>
+                        <el-cascader :options="powerlist" v-model="ruleForm.powerParentId" :props="{ checkStrictly: true }"
+                            clearable></el-cascader>
                         <!-- :show-all-levels="false" -->
                     </el-form-item>
                 </el-col>
@@ -69,10 +69,9 @@
     </div>
 </template>
 <script>
-import { GetPowerTree, GetPowerEnum, CreatePower, GetPar } from '@/api/power';
+import { GetPowerTree, GetPowerEnum, EditPower, UpdatePower } from '@/api/power';
 export default {
     props: {
-        disbales: Number,
         id: Number
     },
     name: 'APP',
@@ -138,10 +137,10 @@ export default {
                     var index = this.ruleForm.powerParentId.length;
                     this.ruleForm.powerParentIdAll = this.ruleForm.powerParentId.toString();
                     this.ruleForm.powerParentId = this.ruleForm.powerParentId == "" ? 0 : this.ruleForm.powerParentId[index - 1];
-                    CreatePower(this.ruleForm).then(d => {
+                    UpdatePower(this.ruleForm).then(d => {
                         if (d.result == 200) {
                             this.$message.success(d.message)
-                            this.$emit("Create", false)
+                            this.$emit("Update", false)
                         } else if (d.result == 100) {
                             this.$message.warning(d.message)
                         } else {
@@ -158,17 +157,20 @@ export default {
             this.$refs[formName].resetFields();
         },
         Edit() {
-            GetPar(this.id).then(d => {
-                this.ruleForm.powerParentId = d.data;
+            EditPower(this.id).then(d => {
+                this.ruleForm = d.data;
+                this.ruleForm.powerParentId = [];
+                d.data.powerParentIdAll.split(",").forEach(item => {
+                    this.ruleForm.powerParentId.push(Number(item))
+                })
+                console.log(d.data)
             })
         }
     },
     created() {
         this.GetPowerTreeList();
         this.GetPowerEnumList();
-        if (this.disbales == 1) {
-            this.Edit();
-        }
+        this.Edit();
     },
     mounted() {
     },

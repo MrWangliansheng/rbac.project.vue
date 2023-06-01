@@ -65,12 +65,20 @@
             </el-popover>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="100">
           <template slot-scope="scope">
-            <el-button @click="UserId = scope.row.userId, dialogFormVisible = true" type="text"
-              size="small">修改信息</el-button>
-            <el-button @click="ResetId = scope.row.userId, Reset = true" type="text" size="small">重置密码</el-button>
-            <el-button @click="LogicDeleteUser(scope.row.userId)" type="text" size="small">删除</el-button>
+
+            <el-popover trigger="hover" placement="top">
+              <el-button @click="UserId = scope.row.userId, dialogFormVisible = true" type="text" size="small"
+                style="color: rgb(185, 38, 214);">修改信息</el-button>
+              <el-button @click="ResetId = scope.row.userId, Reset = true" type="text" size="small"
+                style="color: rgb(73, 200, 54);">重置密码</el-button>
+              <el-button @click="LogicDeleteUser(scope.row.userId)" type="text" size="small"
+                style="color: rgb(211, 65, 29);">删除</el-button>
+              <div slot="reference" class="name-wrapper">
+                <el-tag size="medium">...</el-tag>
+              </div>
+            </el-popover>
           </template>
         </el-table-column>
       </el-table>
