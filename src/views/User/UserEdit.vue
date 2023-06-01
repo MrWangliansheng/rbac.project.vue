@@ -19,7 +19,7 @@
                 </el-col>
             </el-row>
             <el-row :gutter="24">
-                <el-col :span="9">
+                <el-col :span="7">
                     <el-form-item label="状态" prop="userState">
                         <el-radio-group v-model="ruleForm.userState">
                             <el-radio :label="true">启用</el-radio>
@@ -27,13 +27,13 @@
                         </el-radio-group>
                     </el-form-item>
                 </el-col>
-                <el-col :span="7">
+                <el-col :span="10">
                     <el-form-item label="角色" prop="roleId">
-                        <el-cascader :options="treelist" v-model="roleId" @change="GetValue"
+                        <el-cascader :options="treelist" v-model="ruleForm.roleId" @click="GetValue" :emitPath="true"
                             :props="{ multiple: true, checkStrictly: true }" clearable></el-cascader>
                     </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="7">
                     <el-form-item label="头像" prop="userImg">
                         <el-upload class="avatar-uploader" action="http://localhost:5000/api/File/ImgUp"
                             :show-file-list="false" :on-success="handleAvatarSuccess">
@@ -108,6 +108,7 @@ export default Vue.extend({
                 userDesc: "",
                 lastLoginIP: ":IP",
                 roleId: [],
+                roleIdAll: [],
             },
             rules: {
                 userName: [
@@ -156,8 +157,21 @@ export default Vue.extend({
                 method: "get",
                 url: "/User/EditUser?id=" + id
             }).then(d => {
-                console.log(d)
+
                 this.ruleForm = d.data;
+                console.log(d.data.roleIdAll)
+                this.ruleForm.roleId = [];
+                let roleid = [];
+                d.data.roleIdAll.forEach(item => {
+                    let idpush = [];
+                    item.split(',').forEach(item1 => {
+                        // console.log(Number(item1))
+                        idpush.push(Number(item1))
+                    })
+                    roleid.push(idpush)
+                })
+                this.ruleForm.roleId = roleid;
+                console.log(roleid)
             })
         },
         //修改用户信息
@@ -209,8 +223,8 @@ export default Vue.extend({
         }
     },
     created() {
-        this.EditUser(this.id);
         this.GetRoleTree();
+        this.EditUser(this.id);
         this.mode = "asokdjhoak";
     },
     mounted() {

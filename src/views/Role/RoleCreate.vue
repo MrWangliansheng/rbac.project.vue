@@ -16,7 +16,7 @@
             </el-row>
             <el-row :gutter="20">
                 <el-col :span="24" :offset="0">
-                    <el-form-item label="权限菜单" prop="roleId">
+                    <el-form-item label="权限菜单" prop="powerId">
                         <el-cascader :options="prowlist" @change="GetValue" :props="{ multiple: true, checkStrictly: true }"
                             clearable></el-cascader>
                     </el-form-item>
@@ -44,13 +44,14 @@ export default {
                 roleName: '',
                 roleParentId: 0,
                 roleParentIdAll: '',
-                roleId: [],
+                powerId: [],
+                powerIdAll: [],
             },
             rules: {
                 roleName: [
                     { required: true, message: '请输入活动名称', trigger: 'blur' }
                 ],
-                roleId: [
+                powerId: [
                     { required: true, message: '请选择权限菜单', trigger: 'change' }
                 ]
             }
@@ -70,6 +71,8 @@ export default {
                             setTimeout(() => {
                                 this.$emit("dialogFormVisible", false)
                             }, 1000);
+                        } else if (d.result == 100) {
+                            this.$message.warning(d.message);
                         } else {
                             this.$message.error(d.message);
                         }
@@ -94,11 +97,13 @@ export default {
             })
         },
         GetValue(val) {
-            this.ruleForm.roleId = [];
+            this.ruleForm.powerId = [];
+            this.ruleForm.powerIdAll = [];
             console.log(val)
             val.forEach(item => {
                 let index = item.length;
-                this.ruleForm.roleId.push(item[index - 1]);
+                this.ruleForm.powerId.push(item[index - 1]);
+                this.ruleForm.powerIdAll.push(item.toString());
             })
         },
     },

@@ -54,6 +54,7 @@ export default {
         GetRole() {
             GetRoleAll(Object.assign({}, this.page)).then(d => {
                 this.rolelist = d.data;
+                this.page.total = d.total;
             }).catch(err => {
                 console.log(err);
             })

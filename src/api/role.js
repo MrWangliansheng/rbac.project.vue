@@ -1,7 +1,7 @@
 import axios from "@/utils/request"
 
 export function GetRoleAll(params) {
-    debugger
+    // debugger
     return axios({
         method: "get",
         url: '/Role/GetRole',

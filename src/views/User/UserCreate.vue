@@ -132,6 +132,7 @@ export default Vue.extend({
                 userDesc: "",
                 lastLoginIP: ":IP",
                 roleId: [],
+                roleIdAll: [],
             },
             rules: {
                 userName: [
@@ -213,12 +214,14 @@ export default Vue.extend({
             this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
         },
         value(val) {
-            // this.ruleForm.roleId = [];
+            this.ruleForm.roleId = [];
+            this.ruleForm.roleIdAll = [];
             // console.log(val)
             val.forEach(item => {
                 var index = item.length;
                 // console.log(index)
                 this.ruleForm.roleId.push(item[index - 1])
+                this.ruleForm.roleIdAll.push(item.toString());
             })
             console.log(this.ruleForm.roleId)
         }

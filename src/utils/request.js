@@ -17,10 +17,13 @@ axios.interceptors.request.use(function (config) {
     return Promise.reject(error);
 });
 
+
+
 axios.interceptors.response.use(
     response => {
+        // debugger
         const res = response.data;
-
+        let state = true;
         if (res.result === 500) {
             Message({
                 message: res.message,
@@ -29,6 +32,28 @@ axios.interceptors.response.use(
             })
             return Promise.reject(new Error(res.message))
         } else {
+            if (state) {
+                state = false
+                setInterval(() => {
+                    axios.get("/User/GetNewToken?token=" + (`${Vue.ls.get('token')}`).replace("Bearer ", "")).then(d => {
+                        if (d.result == 200) {
+                            Vue.ls.set("token", d.key);
+                            console.log(config);
+                            config.headers['Authorization'] = `${Vue.ls.get('token')}`
+                            console.log("获取了新的Token");
+                            return axios(config);
+                        } else {
+                            Message({
+                                message: "登录已失效请重新登录",
+                                type: "error",
+                                duration: 5 * 1000
+                            })
+                        }
+                    }).catch(err => {
+                        console.log(err);
+                    })
+                }, 280000);
+            }
             return res;
         }
     },
@@ -42,30 +67,47 @@ axios.interceptors.response.use(
             console.log(error.response.status);
         }
         if (error && error.response) {
+            const config = error.response.config;
             switch (error.response.status) {
                 case 400: console.log('请求错误(400)');
                     break;
                 case 401:
-                    axios.get("/User/GetNewToken?token=" + (`${Vue.ls.get('token')}`).replace("Bearer ", "")).then(d => {
-                        debugger
-                        if (d.result == 200) {
-                            Vue.ls.set("token", d.message);
-                            const config = error.response.config;
-                            console.log(config);
-                            config.headers['Authorization'] = `${Vue.ls.get('token')}`
-                            console.log("获取了新的Token");
-                            axios(config)
-                        } else {
-                            Message({
-                                message: "登录已失效请重新登录",
-                                type: "error",
-                                duration: 5 * 1000
-                            })
-                        }
-                    }).catch(err => {
-                        error.message = err;
-
-                    })
+                    setInterval(() => {
+                        axios.get("/User/GetNewToken?token=" + (`${Vue.ls.get('token')}`).replace("Bearer ", "")).then(d => {
+                            if (d.result == 200) {
+                                Vue.ls.set("token", d.key);
+                                console.log(config);
+                                config.headers['Authorization'] = `${Vue.ls.get('token')}`
+                                console.log("获取了新的Token");
+                                return axios(config);
+                            } else {
+                                Message({
+                                    message: "登录已失效请重新登录",
+                                    type: "error",
+                                    duration: 5 * 1000
+                                })
+                            }
+                        }).catch(err => {
+                            console.log(err);
+                        })
+                    }, 28000);
+                    // axios.get("/User/GetNewToken?token=" + (`${Vue.ls.get('token')}`).replace("Bearer ", "")).then(d => {
+                    //     if (d.result == 200) {
+                    //         Vue.ls.set("token", d.key);
+                    //         console.log(config);
+                    //         config.headers['Authorization'] = `${Vue.ls.get('token')}`
+                    //         console.log("获取了新的Token");
+                    //         return axios(config);
+                    //     } else {
+                    //         Message({
+                    //             message: "登录已失效请重新登录",
+                    //             type: "error",
+                    //             duration: 5 * 1000
+                    //         })
+                    //     }
+                    // }).catch(err => {
+                    //     console.log(err);
+                    // })
                     break;
                 case 403: console.log('拒绝访问(403)');
                     break;

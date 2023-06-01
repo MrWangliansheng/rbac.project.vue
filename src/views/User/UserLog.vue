@@ -2,7 +2,7 @@
     <div class="loginMain">
         <el-row class="login">
             <el-col :span="8" :offset="8">
-                <el-card class="loginForm">
+                <el-card class="loginForm" style="background-color: transparent !important">
                     <div slot="header" class="clearfix">
                         <span>用户登录</span>
                     </div>

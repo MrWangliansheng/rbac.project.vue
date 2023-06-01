@@ -74,15 +74,15 @@ export default {
     },
     methods: {
         handleOpen(key, keyPath) {
-            console.log(key, keyPath);
+            // console.log(key, keyPath);
         },
         handleClose(key, keyPath) {
-            console.log(key, keyPath);
+            // console.log(key, keyPath);
         },
         handleSelect(key, keyPath) {
-            console.log(key, keyPath);
+            // console.log(key, keyPath);
             this.show = false;
-            console.log(this.$router)
+            // console.log(this.$router)
             if (this.url == key) {
                 return;
             }
@@ -93,9 +93,7 @@ export default {
         },
         logout() {
             this.$ls.remove("token");
-            this.$router.push({
-                path: '/'
-            })
+            location.reload();
         }
 
     },
