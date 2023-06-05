@@ -30,7 +30,8 @@
                 <el-col :span="10">
                     <el-form-item label="角色" prop="roleIds">
                         <el-cascader :options="treelist" v-model="ruleForm.roleIds" @change="GetValue"
-                            :props="{ multiple: true, checkStrictly: true }" clearable></el-cascader>
+                            :show-all-levels="false" :props="{ multiple: true, checkStrictly: true }"
+                            clearable></el-cascader>
                     </el-form-item>
                 </el-col>
                 <el-col :span="7">

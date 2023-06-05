@@ -45,8 +45,8 @@
             <el-row :gutter="24">
                 <el-col :span="12" :offset="0">
                     <el-form-item label="角色" prop="roleId">
-                        <el-cascader :options="treelist" @change="value" :props="{ multiple: true, checkStrictly: true }"
-                            clearable></el-cascader>
+                        <el-cascader :options="treelist" :show-all-levels="false" @change="value"
+                            :props="{ multiple: true, checkStrictly: true }" clearable></el-cascader>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12" :offset="0">

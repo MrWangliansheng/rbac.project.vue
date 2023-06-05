@@ -20,6 +20,12 @@
 
     <div>
       <el-table border :data="userlist" width="100%" max-height="500">
+        <el-table-column prop="userImg" label="头像">
+          <template slot-scope="scope">
+            <el-avatar style="margin-top: 10px; margin-right: 10px" :size="40"
+              :src="'http://localhost:5000/img/' + scope.row.userImg"></el-avatar>
+          </template>
+        </el-table-column>
         <el-table-column prop="userName" label="登录名"></el-table-column>
         <el-table-column prop="userEmail" label="用户邮箱">
           <template slot-scope="scope">
@@ -48,9 +54,9 @@
         <el-table-column prop="msgCreateTime" label="创建日期">
           <template slot-scope="scope">
             <el-popover trigger="click" placement="top" style="cursor: pointer">
-              <p> {{ scope.row.msgDeleteTime == null ? "" : scope.row.msgDeleteTime.replace("T", " ") }}</p>
+              <p> {{ scope.row.msgCreateTime == null ? "" : scope.row.msgCreateTime.replace("T", " ") }}</p>
               <div slot="reference" class="name-wrapper">
-                {{ scope.row.msgDeleteTime == null ? "" : scope.row.msgDeleteTime.substring(0, 10) }}
+                {{ scope.row.msgCreateTime == null ? "" : scope.row.msgCreateTime.substring(0, 10) }}
               </div>
             </el-popover>
           </template>
@@ -188,17 +194,6 @@ export default {
     Export() {
       ExportUser(this.userlist).then(res => {
         console.log(res);
-        // const link = document.createElement('a')
-        // blob 的type可取接口数据中的type字段，如果后台有返回的话 {type: res.type}
-        // let bolb = res;
-        // let _fileName = res.headers['content-disposition'].split(';')[1].split('=')[1]; //拆解获取文件名，如果后端有给返回文件名的话
-        // link.style.display = 'none';//隐藏
-        // // 兼容不同浏览器的URL对象
-        // const url = window.URL || window.webkitURL || window.moxURL;
-        // link.href = url.createObjectURL(blob);
-        // link.download = _fileName;   //下载的文件名称
-        // link.click();//触发click
-        // window.URL.revokeObjectURL(url);  //  URL.revokeObjectURL()方法会释放一个通过URL.createObjectURL()创建的对象URL. 当你要已经用过了这个对象URL,然后要让浏览器知道这个URL已经不再需要指向对应的文件的时候,就需要调用这个方法.
         const link = document.createElement('a');
         let blob = new Blob([res], { type: 'application/ms-excel' }) // res就是接口返回的文件流了
         link.href = URL.createObjectURL(blob)

@@ -18,7 +18,8 @@
                 <el-col :span="24" :offset="0">
                     <el-form-item label="权限菜单" prop="powerIds">
                         <el-cascader :options="prowlist" v-model="ruleForm.powerIds" @change="GetValue"
-                            :props="{ multiple: true, checkStrictly: true }" clearable></el-cascader>
+                            :show-all-levels="false" :props="{ multiple: true, checkStrictly: true }"
+                            clearable></el-cascader>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -69,6 +70,8 @@ export default {
                     if (index != 0) {
                         this.ruleForm.roleParentIdAll = this.ruleForm.roleParentId.toString();
                         this.ruleForm.roleParentId = this.ruleForm.roleParentId[index - 1];
+                    } else {
+                        this.ruleForm.roleParentId = 0;
                     }
                     debugger
                     UpdateRole(this.ruleForm).then(d => {

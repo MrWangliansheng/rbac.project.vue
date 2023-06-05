@@ -20,7 +20,8 @@
                                 </el-dropdown-menu>
                             </el-dropdown>
                             <el-dropdown>
-                                <el-avatar style="margin-top: 10px; margin-right: 10px" :size="40" src=""></el-avatar>
+                                <el-avatar style="margin-top: 10px; margin-right: 10px" :size="40"
+                                    :src="'http://localhost:5000/img/' + img"></el-avatar>
                                 <el-dropdown-menu slot="dropdown">
                                     <el-dropdown-item>查看</el-dropdown-item>
                                     <el-dropdown-item>新增</el-dropdown-item>
@@ -63,12 +64,14 @@
 </template>
 <script>
 import { RouterView } from "vue-router";
+import jwt_decode from "jwt-decode";
 export default {
     name: "APP",
     data() {
         return {
             url: "",
             log: 0,
+            img: "",
         };
 
     },
@@ -99,6 +102,14 @@ export default {
     },
     created() {
         this.url = this.$route.fullPath;
+        const token = this.$ls.get("token");
+        //data.normal_login_token为请求到的token
+        console.log(token.replace("Bearer ", ""))
+        const decode = jwt_decode(token.replace("Bearer ", "")); // 解析
+        this.img = decode.profile;
+        const Base64 = require("js-base64").Base64
+        console.log(Base64.encode("a;sldkjlasjdnmlkjdla"));
+        console.log(Base64.decode(Base64.encode("a;sldkjlasjdnmlkjdla")));// base64解密)
     },
     mounted() {
     },

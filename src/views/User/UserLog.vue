@@ -24,6 +24,7 @@
                                 </el-input>
                             </el-col>
                         </el-form-item>
+                        <el-checkbox v-model="checked">记住密码</el-checkbox>
                         <el-form-item>
                             <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
                             <el-button @click="resetForm('ruleForm')">重置</el-button>
@@ -41,7 +42,7 @@ export default {
     name: "RbacProjectUiLogin",
     data() {
         return {
-
+            checked: "",
             ruleForm: {
                 name: "",
                 pwd: "",
@@ -63,12 +64,16 @@ export default {
 
                         if (d.result == 200) {
                             this.$message.success(d.message);
-                            // localStorage.setItem("token", d.key)
                             this.$ls.set("token", d.key, 540000);
-                            // this.$session.set("username", this.ruleForm.name)
-                            // console.log(this.ruleForm.name);
-                            // this.$session.get("username")
-                            // console.log(this.$session.get("username"));
+                            const Base64 = require("js-base64").Base64
+                            if (this.checked) {
+                                this.$ls.set("user", this.ruleForm.name)
+                                this.$ls.set("pwd", Base64.encode(this.ruleForm.pwd))
+                                this.$ls.set("checked", this.checked)
+                            } else {
+                                this.$ls.remove("user")
+                                this.$ls.remove("pwd")
+                            }
                             this.$router.push({
                                 path: "/Index",
                             });
@@ -102,6 +107,12 @@ export default {
     },
     created() {
         this.GetGuid();
+        const Base64 = require("js-base64").Base64;
+        if (this.$ls.get("user")) {
+            this.ruleForm.name = this.$ls.get("user");
+            this.ruleForm.pwd = Base64.decode(this.$ls.get("pwd"));
+            this.checked = this.$ls.get("checked")
+        }
     },
     mounted() { },
 };
