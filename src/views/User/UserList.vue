@@ -44,6 +44,17 @@
           </template>
         </el-table-column>
         <el-table-column prop="lastLoginIP" label="最后登录IP"></el-table-column>
+        <el-table-column prop="mesgCreateUser" label="创建人"></el-table-column>
+        <el-table-column prop="msgCreateTime" label="创建日期">
+          <template slot-scope="scope">
+            <el-popover trigger="click" placement="top" style="cursor: pointer">
+              <p> {{ scope.row.msgDeleteTime == null ? "" : scope.row.msgDeleteTime.replace("T", " ") }}</p>
+              <div slot="reference" class="name-wrapper">
+                {{ scope.row.msgDeleteTime == null ? "" : scope.row.msgDeleteTime.substring(0, 10) }}
+              </div>
+            </el-popover>
+          </template>
+        </el-table-column>
         <el-table-column prop="msgUpdateUser" label="最近修改人"></el-table-column>
         <el-table-column prop="lastLoginTime" label="最近修改时间">
           <template slot-scope="scope">
@@ -51,17 +62,6 @@
               <p> {{ scope.row.megUpdateTipme == null ? "" : scope.row.megUpdateTipme.replace("T", " ") }}</p>
               <div slot="reference" class="name-wrapper">
                 {{ scope.row.megUpdateTipme == null ? "" : scope.row.megUpdateTipme.substring(0, 10) }}
-              </div>
-            </el-popover>
-          </template>
-        </el-table-column>
-        <el-table-column prop="megDeleteUser" label="删除人"></el-table-column>
-        <el-table-column prop="msgDeleteTime" label="删除日期">
-          <template slot-scope="scope">
-            <el-popover trigger="click" placement="top" style="cursor: pointer">
-              <p> {{ scope.row.msgDeleteTime == null ? "" : scope.row.msgDeleteTime.replace("T", " ") }}</p>
-              <div slot="reference" class="name-wrapper">
-                {{ scope.row.msgDeleteTime == null ? "" : scope.row.msgDeleteTime.substring(0, 10) }}
               </div>
             </el-popover>
           </template>

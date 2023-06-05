@@ -31,3 +31,7 @@ export function LogicDeleteAsyncRole(id) {
 export function RoleEdit(id) {
     return axios.get("/Role/EditRole?id=" + id)
 }
+
+export function UpdateRole(data) {
+    return axios.put("/Role/UpdateRole", data)
+}

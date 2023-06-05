@@ -5,9 +5,17 @@
         </div>
         <el-table :data="rolelist" border style="width: 100%">
             <el-table-column fixed prop="roleName" label="角色名称"></el-table-column>
-            <el-table-column fixed prop="roleName" label="添加日期">
+            <el-table-column fixed prop="mesgCreateUser" label="创建人"></el-table-column>
+            <el-table-column fixed prop="msgCreateTime" label="添加日期">
                 <template slot-scope="scope">
-                    {{ scope.row.roleCreateTime.replace("T", " ") }}
+                    <span v-if="scope.row.msgCreateTime != null">{{ scope.row.msgCreateTime.replace("T", " ") }}</span>
+
+                </template>
+            </el-table-column>
+            <el-table-column fixed prop="msgUpdateUser" label="修改人"></el-table-column>
+            <el-table-column fixed prop="megUpdateTipme" label="修改日期">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.megUpdateTipme != null">{{ scope.row.megUpdateTipme.replace("T", " ") }}</span>
                 </template>
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="100">
@@ -35,7 +43,7 @@
             </el-dialog>
         </div>
         <div>
-            <el-dialog title="添加角色信息" :visible.sync="EditVisible" :modal="false">
+            <el-dialog title="修改角色信息" :visible.sync="EditVisible" :modal="false">
                 <RoleEdit :key="new Date().getTime()" :id="roleid" @dialogFormVisible="Visible"></RoleEdit>
             </el-dialog>
         </div>
@@ -76,6 +84,7 @@ export default {
         },
         Visible(val) {
             this.dialogFormVisible = val;
+            this.EditVisible = val;
             location.reload();
         },
         DeleteRole(id) {

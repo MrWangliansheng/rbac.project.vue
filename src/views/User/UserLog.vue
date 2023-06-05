@@ -19,7 +19,8 @@
                                     <template slot="append"> <img id="Code" width="60" height="35px"
                                             style="margin-left: 5px;cursor: pointer;" @click="GetCode" title="看不清,换一张"
                                             :src="'http://localhost:5000/api/AuthCode/UserCode?guid=' + ruleForm.guid"
-                                            alt="" /></template>
+                                            alt="" />
+                                    </template>
                                 </el-input>
                             </el-col>
                         </el-form-item>

@@ -4,7 +4,7 @@
             <el-row :gutter="20">
                 <el-col :span="12" :offset="0">
                     <el-form-item label="上级" prop="roleParentId">
-                        <el-cascader :options="treelist" v-model="parentid" :props="{ checkStrictly: true }"
+                        <el-cascader :options="treelist" v-model="ruleForm.roleParentId" :props="{ checkStrictly: true }"
                             clearable></el-cascader>
                     </el-form-item>
                 </el-col>
@@ -16,22 +16,22 @@
             </el-row>
             <el-row :gutter="20">
                 <el-col :span="24" :offset="0">
-                    <el-form-item label="权限菜单" prop="powerId">
-                        <el-cascader :options="prowlist" @change="GetValue" :props="{ multiple: true, checkStrictly: true }"
-                            clearable></el-cascader>
+                    <el-form-item label="权限菜单" prop="powerIds">
+                        <el-cascader :options="prowlist" v-model="ruleForm.powerIds" @change="GetValue"
+                            :props="{ multiple: true, checkStrictly: true }" clearable></el-cascader>
                     </el-form-item>
                 </el-col>
             </el-row>
 
             <el-form-item>
-                <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+                <el-button type="primary" @click="submitForm('ruleForm')">立即修改</el-button>
                 <el-button @click="resetForm('ruleForm')">重置</el-button>
             </el-form-item>
         </el-form>
     </div>
 </template>
 <script>
-import { CreateRole, GetRoleTree, RoleEdit } from "@/api/role"
+import { UpdateRole, GetRoleTree, RoleEdit } from "@/api/role"
 import { GetPowerTree } from "@/api/power";
 export default {
     props: {
@@ -45,16 +45,17 @@ export default {
             prowlist: [],
             ruleForm: {
                 roleName: '',
-                roleParentId: 0,
+                roleParentId: [],
                 roleParentIdAll: '',
                 powerId: [],
+                powerIds: [],
                 powerIdAll: [],
             },
             rules: {
                 roleName: [
-                    { required: true, message: '请输入活动名称', trigger: 'blur' }
+                    { required: true, message: '请输入角色名称', trigger: 'blur' }
                 ],
-                powerId: [
+                powerIds: [
                     { required: true, message: '请选择权限菜单', trigger: 'change' }
                 ]
             }
@@ -64,11 +65,13 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    let index = this.parentid.length;
-
-                    this.ruleForm.roleParentId = this.parentid[index - 1];
-                    this.ruleForm.roleParentIdAll = this.parentid.toString();
-                    CreateRole(this.ruleForm).then(d => {
+                    let index = this.ruleForm.roleParentId.length;
+                    if (index != 0) {
+                        this.ruleForm.roleParentIdAll = this.ruleForm.roleParentId.toString();
+                        this.ruleForm.roleParentId = this.ruleForm.roleParentId[index - 1];
+                    }
+                    debugger
+                    UpdateRole(this.ruleForm).then(d => {
                         if (d.result == 200) {
                             this.$message.success(d.message);
                             setTimeout(() => {
@@ -102,17 +105,29 @@ export default {
         GetValue(val) {
             this.ruleForm.powerId = [];
             this.ruleForm.powerIdAll = [];
-            console.log(val)
             val.forEach(item => {
                 let index = item.length;
                 this.ruleForm.powerId.push(item[index - 1]);
                 this.ruleForm.powerIdAll.push(item.toString());
             })
+            console.log(this.ruleForm.powerId)
         },
         Edit() {
             RoleEdit(this.id).then(d => {
                 console.log(d.data);
                 this.ruleForm = d.data;
+                this.ruleForm.roleParentId = [];
+                this.ruleForm.powerIds = [];
+                // console.log(d.data.roleParentIdAll.split(","))
+                if (d.data.roleParentIdAll != null) {
+                    d.data.roleParentIdAll.split(",").forEach(item => {
+                        this.ruleForm.roleParentId.push(Number(item));
+                    })
+                }
+
+                d.data.powerIdAll.forEach(item => {
+                    this.ruleForm.powerIds.push(item.split(","))
+                })
             })
         }
     },
