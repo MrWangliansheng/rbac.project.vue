@@ -18,11 +18,8 @@ export function GetUserInfoPage(dto) {
 }
 //修改用户信息
 export function UpdateUser(data) {
-    return axios({
-        method: "put",
-        url: '/User/UpdateUser',
-        data
-    })
+    return axios.put('/User/UpdateUser', data)
+
 }
 //重置密码
 export function ResetPasswrod(data) {
@@ -43,6 +40,15 @@ export function CreateUserAsync(data) {
     return axios.post("/User/CreateUser", data)
 }
 
-export function GetUserName(name) {
-    return axios.get("/User/GetUserName?name=" + name)
+
+export function ExportUser(data) {
+    return axios({
+        method: 'post',
+        url: '/User/Export',
+        data,
+        responseType: 'blob'
+    })
 }
+// export function GetUserName(name) {
+//     return axios.get("/User/GetUserName?name=" + name)
+// }

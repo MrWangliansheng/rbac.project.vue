@@ -267,4 +267,8 @@ export default Vue.extend({
     height: 80px;
     display: block;
 }
+
+.el-cascader-panel {
+    height: 100px;
+}
 </style>

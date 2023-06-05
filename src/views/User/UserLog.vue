@@ -63,11 +63,11 @@ export default {
                         if (d.result == 200) {
                             this.$message.success(d.message);
                             // localStorage.setItem("token", d.key)
-                            this.$ls.set("token", d.key);
-                            this.$session.set("username", this.ruleForm.name)
-                            console.log(this.ruleForm.name);
+                            this.$ls.set("token", d.key, 540000);
+                            // this.$session.set("username", this.ruleForm.name)
+                            // console.log(this.ruleForm.name);
                             // this.$session.get("username")
-                            console.log(this.$session.get("username"));
+                            // console.log(this.$session.get("username"));
                             this.$router.push({
                                 path: "/Index",
                             });

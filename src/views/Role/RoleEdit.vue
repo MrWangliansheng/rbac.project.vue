@@ -31,9 +31,12 @@
     </div>
 </template>
 <script>
-import { CreateRole, GetRoleTree } from "@/api/role"
+import { CreateRole, GetRoleTree, RoleEdit } from "@/api/role"
 import { GetPowerTree } from "@/api/power";
 export default {
+    props: {
+        id: Number
+    },
     name: 'APP',
     data() {
         return {
@@ -106,10 +109,17 @@ export default {
                 this.ruleForm.powerIdAll.push(item.toString());
             })
         },
+        Edit() {
+            RoleEdit(this.id).then(d => {
+                console.log(d.data);
+                this.ruleForm = d.data;
+            })
+        }
     },
     created() {
         this.GetRoleTree();
         this.GetPowerTreeList();
+        this.Edit();
     },
     mounted() {
     },

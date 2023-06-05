@@ -27,3 +27,7 @@ export function GetRoleTree(data) {
 export function LogicDeleteAsyncRole(id) {
     return axios.delete("/Role/LogicDeleteAsyncRole?id=" + id)
 }
+
+export function RoleEdit(id) {
+    return axios.get("/Role/EditRole?id=" + id)
+}

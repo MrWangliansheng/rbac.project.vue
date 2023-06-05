@@ -28,3 +28,7 @@ export function EditPower(id) {
 export function UpdatePower(data) {
     return axios.put("/Power/UpdatePower", data)
 }
+
+export function LogicDeleteAsync(id) {
+    return axios.delete("/Power/DeletePower?id=" + id)
+}

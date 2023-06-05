@@ -28,8 +28,8 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="10">
-                    <el-form-item label="角色" prop="roleId">
-                        <el-cascader :options="treelist" v-model="ruleForm.roleId" @click="GetValue" :emitPath="true"
+                    <el-form-item label="角色" prop="roleIds">
+                        <el-cascader :options="treelist" v-model="ruleForm.roleIds" @change="GetValue"
                             :props="{ multiple: true, checkStrictly: true }" clearable></el-cascader>
                     </el-form-item>
                 </el-col>
@@ -55,7 +55,7 @@
                 </el-col>
             </el-row>
             <el-form-item>
-                <el-button type="primary" @click="UpdateUser('ruleForm')">修改</el-button>
+                <el-button type="primary" @click="UpdateUserInfo('ruleForm')">修改</el-button>
                 <el-button @click="resetForm('ruleForm')">重置</el-button>
             </el-form-item>
         </el-form>
@@ -64,7 +64,7 @@
 <script>
 import { GetRoleTree } from "@/api/role";
 import axios from "@/utils/request";
-import { UpdateUser, GetUserName } from "@/api/admin"
+import { UpdateUser } from "@/api/admin"
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
 import Vue from 'vue'
 export default Vue.extend({
@@ -74,20 +74,20 @@ export default Vue.extend({
     },
     name: 'APP',
     data() {
-        var Nameduplication = (rule, value, callback) => {
-            if (!value) {
-                return callback(new Error('用户名不可为空'));
-            }
-            setTimeout(() => {
-                GetUserName(value).then(d => {
-                    if (d.result == 200) {
-                        callback();
-                    } else {
-                        callback(new Error('用户名已存在'));
-                    }
-                })
-            }, 1000);
-        };
+        // var Nameduplication = (rule, value, callback) => {
+        //     if (!value) {
+        //         return callback(new Error('用户名不可为空'));
+        //     }
+        //     // setTimeout(() => {
+        //     //     GetUserName(value).then(d => {
+        //     //         if (d.result == 200) {
+        //     //             callback();
+        //     //         } else {
+        //     //             callback(new Error('用户名已存在'));
+        //     //         }
+        //     //     })
+        //     // }, 1000);
+        // };
         return {
             //富文本编译器变量
             editor: null,
@@ -99,7 +99,7 @@ export default Vue.extend({
             treelist: [],
             ruleForm: {
                 userName: '',
-                fullName: "",
+                pullName: "",
                 userEmail: '',
                 userPassword: '',
                 userPasswords: '',
@@ -108,16 +108,17 @@ export default Vue.extend({
                 userDesc: "",
                 lastLoginIP: ":IP",
                 roleId: [],
+                roleIds: [],
                 roleIdAll: [],
             },
             rules: {
                 userName: [
-                    { required: true, validator: Nameduplication, trigger: 'blur' }
-                ],
-                fullName: [
                     { required: true, message: '请输入真实姓名', trigger: 'blur' }
                 ],
-                roleId: [
+                pullName: [
+                    { required: true, message: '请输入真实姓名', trigger: 'blur' }
+                ],
+                roleIds: [
                     { required: true, message: '请选择角色', trigger: 'change' }
                 ],
                 userState: [
@@ -151,32 +152,10 @@ export default Vue.extend({
             }
             this.ruleForm.userImg = res.message;
         },
-        EditUser(id) {
-            console.log(id);
-            axios({
-                method: "get",
-                url: "/User/EditUser?id=" + id
-            }).then(d => {
-
-                this.ruleForm = d.data;
-                console.log(d.data.roleIdAll)
-                this.ruleForm.roleId = [];
-                let roleid = [];
-                d.data.roleIdAll.forEach(item => {
-                    let idpush = [];
-                    item.split(',').forEach(item1 => {
-                        // console.log(Number(item1))
-                        idpush.push(Number(item1))
-                    })
-                    roleid.push(idpush)
-                })
-                this.ruleForm.roleId = roleid;
-                console.log(roleid)
-            })
-        },
         //修改用户信息
-        UpdateUser(formName) {
+        UpdateUserInfo(formName) {
             this.$refs[formName].validate((valid) => {
+                debugger
                 if (valid) {
                     UpdateUser(this.ruleForm).then(d => {
                         if (d.result == 200) {
@@ -196,6 +175,29 @@ export default Vue.extend({
                 }
             });
         },
+        EditUser(id) {
+            console.log(id);
+            axios({
+                method: "get",
+                url: "/User/EditUser?id=" + id
+            }).then(d => {
+
+                this.ruleForm = d.data;
+                console.log(d.data.roleIdAll)
+                // this.ruleForm.roleIds = [];
+                let roleids = [];
+                d.data.roleIdAll.forEach(item => {
+                    let idpush = [];
+                    item.split(',').forEach(item1 => {
+                        // console.log(Number(item1))
+                        idpush.push(Number(item1))
+                    })
+                    roleids.push(idpush)
+                })
+                this.ruleForm.roleIds = roleids;
+                console.log(roleids)
+            })
+        },
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },
@@ -209,14 +211,13 @@ export default Vue.extend({
         },
         GetValue(val) {
             this.ruleForm.roleId = [];
+            this.ruleForm.roleIdAll = [];
             console.log(val);
             debugger
             val.forEach(item => {
-                // item.forEach(item1 => {
-                //     debugger
-                // })
                 var index = item.length;
                 this.ruleForm.roleId.push(item[index - 1])
+                this.ruleForm.roleIdAll.push(item.toString());
                 console.log(item);
             })
             console.log(this.ruleForm.roleId);
@@ -268,5 +269,9 @@ export default Vue.extend({
     width: 80px;
     height: 80px;
     display: block;
+}
+
+.el-cascader-panel {
+    height: 100px;
 }
 </style>

@@ -12,7 +12,14 @@
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="100">
                 <template slot-scope="scope">
-                    <el-button type="text" size="small" @click="DeleteRole(scope.row.roleId)">删除</el-button>
+                    <el-popover trigger="hover" placement="top">
+                        <el-button type="text" size="small" @click="DeleteRole(scope.row.roleId)">删除</el-button>
+                        <el-button type="text" size="small" @click="roleid = scope.row.roleId, EditVisible = true"
+                            style="color:rgb(135, 32, 187)">编辑</el-button>
+                        <div slot="reference" class="name-wrapper">
+                            <el-tag size="medium">...</el-tag>
+                        </div>
+                    </el-popover>
                 </template>
             </el-table-column>
         </el-table>
@@ -27,14 +34,21 @@
                 <RoleCreate :key="new Date().getTime()" @dialogFormVisible="Visible"></RoleCreate>
             </el-dialog>
         </div>
+        <div>
+            <el-dialog title="添加角色信息" :visible.sync="EditVisible" :modal="false">
+                <RoleEdit :key="new Date().getTime()" :id="roleid" @dialogFormVisible="Visible"></RoleEdit>
+            </el-dialog>
+        </div>
     </div>
 </template>
 <script>
 import { GetRoleAll, LogicDeleteAsyncRole } from "@/api/role"
 import RoleCreate from "@/views/Role/RoleCreate.vue"
+import RoleEdit from "@/views/Role/RoleEdit.vue"
 export default {
     components: {
-        RoleCreate
+        RoleCreate,
+        RoleEdit
     },
     name: 'APP',
     data() {
@@ -42,6 +56,7 @@ export default {
             roleid: "",
             rolelist: [],
             dialogFormVisible: false,
+            EditVisible: false,
             page: {
                 pageindex: 1,
                 pagesize: 6,

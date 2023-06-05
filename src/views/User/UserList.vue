@@ -13,6 +13,7 @@
         <el-form-item>
           <el-button type="primary" @click="page.pageindex = 1, GetUserList()">查询</el-button>
           <el-button type="success" @click="CreateVisible = true">添加</el-button>
+          <el-button type="success" @click="Export()">导出数据</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -111,7 +112,7 @@
   </div>
 </template>
 <script>
-import { GetUserInfoPage, EditUser, LogicDeleteUserAsync } from '@/api/admin';
+import { GetUserInfoPage, ExportUser, LogicDeleteUserAsync } from '@/api/admin';
 import UserEdit from "@/views/User/UserEdit.vue"
 import UserResetPasswrod from "@/views/User/UserResetPasswrod.vue"
 import UserCreate from "@/views/User/UserCreate.vue"
@@ -183,6 +184,32 @@ export default {
     },
     CloseDialog(val) {
       this.dialogFormVisible = false;
+    },
+    Export() {
+      ExportUser(this.userlist).then(res => {
+        console.log(res);
+        // const link = document.createElement('a')
+        // blob 的type可取接口数据中的type字段，如果后台有返回的话 {type: res.type}
+        // let bolb = res;
+        // let _fileName = res.headers['content-disposition'].split(';')[1].split('=')[1]; //拆解获取文件名，如果后端有给返回文件名的话
+        // link.style.display = 'none';//隐藏
+        // // 兼容不同浏览器的URL对象
+        // const url = window.URL || window.webkitURL || window.moxURL;
+        // link.href = url.createObjectURL(blob);
+        // link.download = _fileName;   //下载的文件名称
+        // link.click();//触发click
+        // window.URL.revokeObjectURL(url);  //  URL.revokeObjectURL()方法会释放一个通过URL.createObjectURL()创建的对象URL. 当你要已经用过了这个对象URL,然后要让浏览器知道这个URL已经不再需要指向对应的文件的时候,就需要调用这个方法.
+        const link = document.createElement('a');
+        let blob = new Blob([res], { type: 'application/ms-excel' }) // res就是接口返回的文件流了
+        link.href = URL.createObjectURL(blob)
+        link.download = "用户信息.xlsx";
+        document.body.appendChild(link);
+        link.click();
+        URL.revokeObjectURL(blob);
+        document.body.removeChild(link);
+      }).catch(err => {
+        console.log(err);
+      })
     }
   },
   created() {

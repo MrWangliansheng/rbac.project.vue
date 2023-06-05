@@ -28,7 +28,8 @@
                         <el-popover trigger="hover" placement="top">
                             <el-button @click=" powerid = scope.row.powerId, EditVisible = true" type="text"
                                 size="small">编辑</el-button>
-                            <el-button type="text" size="small" style="color: red;">删除</el-button>
+                            <el-button type="text" size="small" @click="DeletePower(scope.row.powerId)"
+                                style="color: red;">删除</el-button>
                             <el-button type="text" size="small" v-if="scope.row.powerType != 3"
                                 style="color: rgb(108, 34, 135);"
                                 @click="disbales = true, powerid = scope.row.powerId, dialogFormVisible = true">添加子菜单</el-button>
@@ -56,7 +57,7 @@
     </div>
 </template>
 <script>
-import { GetPowerTreeTableLevelone } from "@/api/power"
+import { GetPowerTreeTableLevelone, LogicDeleteAsync } from "@/api/power"
 import PowerCreatre from "./PowerCreatre.vue"
 import PowerEdit from "./PowerEdit.vue"
 
@@ -92,6 +93,27 @@ export default {
             this.dialogFormVisible = false;
             this.EditVisible = false;
             this.GetPowerTreeTableLevel();
+        }, DeletePower(id) {
+            this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                LogicDeleteAsync(id).then(d => {
+                    if (d.result == 200) {
+                        this.$message.success(d.message)
+                        this.GetPowerTreeTableLevel();
+                    } else {
+                        this.$message.error(d.message)
+                    }
+                })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
+
         }
     },
     created() {
