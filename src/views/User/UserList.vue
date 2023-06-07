@@ -183,7 +183,7 @@ export default {
     },
     LogicDeleteUser(id) {
 
-      console.log(this.userlist)
+      // console.log(this.userlist)
       LogicDeleteUserAsync(id).then(d => {
         this.$message.success(d.message)
       })
@@ -193,7 +193,7 @@ export default {
     },
     Export() {
       ExportUser(this.userlist).then(res => {
-        console.log(res);
+        // console.log(res);
         const link = document.createElement('a');
         let blob = new Blob([res], { type: 'application/ms-excel' }) // res就是接口返回的文件流了
         link.href = URL.createObjectURL(blob)

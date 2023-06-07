@@ -38,19 +38,13 @@
                 <el-aside style="width: 200px;">
                     <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
                         @select="handleSelect" active-text-color="#ffd04b">
-                        <el-submenu index="1">
+                        <el-submenu v-for="item in powerlist" :key="item.powerId" :index="item.powerRoute">
                             <template slot="title">
-                                <i class="el-icon-user"></i>
-                                <span>用户信息</span>
+                                <i :class="item.powerIcon"></i>
+                                <span>{{ item.powerName }}</span>
                             </template>
-                            <el-menu-item index="/UserList">
-                                <i class="el-icon-user-solid"></i>用户信息
-                            </el-menu-item>
-                            <el-menu-item index="/RoleList">
-                                <i class="el-icon-s-marketing"></i>角色信息
-                            </el-menu-item>
-                            <el-menu-item index="/PowerList">
-                                <i class="el-icon-s-marketing"></i>权限列表
+                            <el-menu-item v-for="route in item.children" :key="route.powerId" :index="route.powerRoute">
+                                <i :class="route.powerIcon"></i>{{ route.powerName }}
                             </el-menu-item>
                         </el-submenu>
                     </el-menu>
@@ -65,6 +59,7 @@
 <script>
 import { RouterView } from "vue-router";
 import jwt_decode from "jwt-decode";
+import { GetPowerTreeTableLevelone, LogicDeleteAsync } from "@/api/power"
 export default {
     name: "APP",
     data() {
@@ -72,6 +67,7 @@ export default {
             url: "",
             log: 0,
             img: "",
+            powerlist: [],
         };
 
     },
@@ -97,19 +93,24 @@ export default {
         logout() {
             this.$ls.remove("token");
             location.reload();
-        }
+        },
+        GetPowerTreeTableLevel() {
+            GetPowerTreeTableLevelone(0).then(d => {
+                this.powerlist = d.data;
+                this.$ls.set("button", this.powerlist)
+            }).catch(err => {
+                console.log(err);
+            })
+        },
 
     },
     created() {
+        this.GetPowerTreeTableLevel();
         this.url = this.$route.fullPath;
         const token = this.$ls.get("token");
-        //data.normal_login_token为请求到的token
-        console.log(token.replace("Bearer ", ""))
         const decode = jwt_decode(token.replace("Bearer ", "")); // 解析
         this.img = decode.profile;
-        const Base64 = require("js-base64").Base64
-        console.log(Base64.encode("a;sldkjlasjdnmlkjdla"));
-        console.log(Base64.decode(Base64.encode("a;sldkjlasjdnmlkjdla")));// base64解密)
+        this.$ls.set("UserId", decode.id);
     },
     mounted() {
     },

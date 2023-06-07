@@ -36,11 +36,9 @@ export function UpdateRole(data) {
     return axios.put("/Role/UpdateRole", data)
 }
 
-export function GetRoleName(id, name) {
-    return axios.get("/Role/GetRoleName", {
-        params: {
-            id: id,
-            name: name
-        }
+export function GetRolePower(params) {
+    debugger
+    return axios.get("/Role/GetRolePower", {
+        params
     })
 }

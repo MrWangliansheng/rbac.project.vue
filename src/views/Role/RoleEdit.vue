@@ -145,6 +145,6 @@ export default {
 </script>
 <style>
 .el-cascader-panel {
-    height: 100px;
+    height: 200px;
 }
 </style>

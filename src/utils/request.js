@@ -19,14 +19,13 @@ axios.interceptors.request.use(function (config) {
 
 
 let state = true;
-console.log(state);
-export function GetNewToken() {
+export function GetNewToken(config) {
     axios.get("/User/GetNewToken?token=" + (`${Vue.ls.get('token')}`).replace("Bearer ", "")).then(d => {
         if (d.result == 200) {
             Vue.ls.set("token", d.key, 540000);
-            console.log(config);
             config.headers['Authorization'] = `${Vue.ls.get('token')}`
             console.log("获取了新的Token");
+            console.log(config);
             return axios(config);
         } else {
             Message({
@@ -54,10 +53,9 @@ axios.interceptors.response.use(
         } else {
             if (state && Vue.ls.get("token") != null) {
                 state = false
-                console.log(12345)
-                GetNewToken();
+                GetNewToken(response.config);
                 setInterval(() => {
-                    GetNewToken();
+                    GetNewToken(response.config);
                 }, 280000);
             }
             return res;
@@ -78,9 +76,11 @@ axios.interceptors.response.use(
                 case 400: console.log('请求错误(400)');
                     break;
                 case 401:
-                    setInterval(() => {
-                        GetNewToken();
-                    }, 28000);
+                    // setInterval(() => {
+                    //     GetNewToken(error.response.config);
+                    // }, 28000);
+                    // console.log(123123897123871982)
+                    console.log("未授权(401)")
                     break;
                 case 403: console.log('拒绝访问(403)');
                     break;
@@ -105,7 +105,7 @@ axios.interceptors.response.use(
         } else {
             console.log('连接服务器失败!')
         }
-        return Promise.reject(error)
+        console.log(error)
     }
 )
 export default axios;
