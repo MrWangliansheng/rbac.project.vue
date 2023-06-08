@@ -5,7 +5,8 @@
         </div>
         <div>
             <el-table :data="powerlist" style="width: 100%" row-key="powerId" border lazy :load="load"
-                :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+                :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" tooltip-effect="dark">
+                <el-table-column type="selection" width="55"></el-table-column>
                 <el-table-column prop="powerName" label="名称">
                 </el-table-column>
                 <el-table-column prop="powerIcon" label="图标">
@@ -26,13 +27,17 @@
                 <el-table-column fixed="right" label="操作" width="100">
                     <template slot-scope="scope">
                         <el-popover trigger="hover" placement="top">
-                            <el-button @click=" powerid = scope.row.powerId, EditVisible = true" type="text"
-                                size="small">编辑</el-button>
-                            <el-button type="text" size="small" @click="DeletePower(scope.row.powerId)"
-                                style="color: red;">删除</el-button>
-                            <el-button type="text" size="small" v-if="scope.row.powerType != 3"
-                                style="color: rgb(108, 34, 135);"
-                                @click="disbales = true, powerid = scope.row.powerId, dialogFormVisible = true">添加子菜单</el-button>
+                            <span v-for="item in buttonlist">
+                                <el-button @click=" powerid = scope.row.powerId, EditVisible = true" type="text"
+                                    size="small" v-if="item.powerName == '修改菜单'">编辑</el-button>
+                                <el-button type="text" size="small" @click="DeletePower(scope.row.powerId)"
+                                    style="color: red;" v-if="item.powerName == '删除菜单'">删除</el-button>
+                                <el-button type="text" size="small"
+                                    v-if="scope.row.powerType != 3 && item.powerName == '添加子菜单'"
+                                    style="color: rgb(108, 34, 135);"
+                                    @click="disbales = true, powerid = scope.row.powerId, dialogFormVisible = true">添加子菜单</el-button>
+                            </span>
+
                             <div slot="reference" class="name-wrapper">
                                 <el-tag size="medium">...</el-tag>
                             </div>
@@ -60,7 +65,7 @@
 import { GetPowerTreeTableLevelone, LogicDeleteAsync } from "@/api/power"
 import PowerCreatre from "./PowerCreatre.vue"
 import PowerEdit from "./PowerEdit.vue"
-
+import { GetRolePowerButton } from "@/api/role"
 export default {
     components: {
         PowerCreatre,
@@ -69,6 +74,7 @@ export default {
     name: 'APP',
     data() {
         return {
+            buttonlist: [],
             dialogFormVisible: false,
             disbales: 0,
             powerlist: [],
@@ -113,11 +119,21 @@ export default {
                     message: '已取消删除'
                 });
             });
-
+        },
+        GetRolePowerButton() {
+            GetRolePowerButton({
+                id: Number(this.$ls.get("UserId")),
+                state: 3
+            }).then(d => {
+                this.buttonlist = d.data;
+            }).catch(error => {
+                console.log(error)
+            })
         }
     },
     created() {
         this.GetPowerTreeTableLevel();
+        this.GetRolePowerButton();
     },
     mounted() {
     },

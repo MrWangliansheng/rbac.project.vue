@@ -17,7 +17,7 @@
             <el-row :gutter="20">
                 <el-col :span="24" :offset="0">
                     <el-form-item label="权限菜单" prop="powerIds">
-                        <el-cascader :options="prowlist" v-model="ruleForm.powerIds" @change="GetValue"
+                        <el-cascader :options="prowlist" style="width: 100%;" v-model="ruleForm.powerIds" @change="GetValue"
                             :show-all-levels="false" :props="{ multiple: true, checkStrictly: true }"
                             clearable></el-cascader>
                     </el-form-item>

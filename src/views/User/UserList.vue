@@ -76,12 +76,16 @@
           <template slot-scope="scope">
 
             <el-popover trigger="hover" placement="top">
-              <el-button @click="UserId = scope.row.userId, dialogFormVisible = true" type="text" size="small"
-                style="color: rgb(185, 38, 214);">修改信息</el-button>
-              <el-button @click="ResetId = scope.row.userId, Reset = true" type="text" size="small"
-                style="color: rgb(73, 200, 54);">重置密码</el-button>
-              <el-button @click="LogicDeleteUser(scope.row.userId)" type="text" size="small"
-                style="color: rgb(211, 65, 29);">删除</el-button>
+              <span v-for="item in buttonlist">
+                <el-button @click="UserId = scope.row.userId, dialogFormVisible = true" type="text" size="small"
+                  style="color: rgb(185, 38, 214);" v-if="item.powerName == '修改用户'"><i
+                    class="item.powerIcon"></i>修改信息</el-button>
+                <el-button @click="ResetId = scope.row.userId, Reset = true" type="text" size="small"
+                  style="color: rgb(73, 200, 54);" v-if="item.powerName == '重置密码'"><i
+                    class="item.powerIcon"></i>重置密码</el-button>
+                <el-button @click="LogicDeleteUser(scope.row.userId)" type="text" size="small"
+                  style="color: rgb(211, 65, 29);" v-if="item.powerName == '删除用户'" icon="item.powerIcon">删除</el-button>
+              </span>
               <div slot="reference" class="name-wrapper">
                 <el-tag size="medium">...</el-tag>
               </div>
@@ -122,6 +126,7 @@ import { GetUserInfoPage, ExportUser, LogicDeleteUserAsync } from '@/api/admin';
 import UserEdit from "@/views/User/UserEdit.vue"
 import UserResetPasswrod from "@/views/User/UserResetPasswrod.vue"
 import UserCreate from "@/views/User/UserCreate.vue"
+import { GetRolePowerButton } from "@/api/role"
 export default {
   components: {
     UserEdit,
@@ -131,6 +136,7 @@ export default {
   name: "APP",
   data() {
     return {
+      buttonlist: [],
       userlist: [],
       //重置密码弹出层是否显示
       Reset: false,
@@ -205,10 +211,21 @@ export default {
       }).catch(err => {
         console.log(err);
       })
+    },
+    GetRolePowerButton() {
+      GetRolePowerButton({
+        id: Number(this.$ls.get("UserId")),
+        state: 3
+      }).then(d => {
+        this.buttonlist = d.data;
+      }).catch(error => {
+        console.log(error)
+      })
     }
   },
   created() {
     this.GetUserList();
+    this.GetRolePowerButton();
   },
   mounted() { },
 };

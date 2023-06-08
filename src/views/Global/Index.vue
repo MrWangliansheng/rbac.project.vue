@@ -59,7 +59,7 @@
 <script>
 import { RouterView } from "vue-router";
 import jwt_decode from "jwt-decode";
-import { GetPowerTreeTableLevelone, LogicDeleteAsync } from "@/api/power"
+import { GetRolePower } from "@/api/role"
 export default {
     name: "APP",
     data() {
@@ -94,8 +94,8 @@ export default {
             this.$ls.remove("token");
             location.reload();
         },
-        GetPowerTreeTableLevel() {
-            GetPowerTreeTableLevelone(0).then(d => {
+        GetRolePower(id) {
+            GetRolePower().then(d => {
                 this.powerlist = d.data;
                 this.$ls.set("button", this.powerlist)
             }).catch(err => {
@@ -105,10 +105,10 @@ export default {
 
     },
     created() {
-        this.GetPowerTreeTableLevel();
         this.url = this.$route.fullPath;
         const token = this.$ls.get("token");
         const decode = jwt_decode(token.replace("Bearer ", "")); // 解析
+        this.GetRolePower(decode.id);
         this.img = decode.profile;
         this.$ls.set("UserId", decode.id);
     },

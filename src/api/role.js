@@ -36,9 +36,12 @@ export function UpdateRole(data) {
     return axios.put("/Role/UpdateRole", data)
 }
 
-export function GetRolePower(params) {
+export function GetRolePowerButton(params) {
     debugger
-    return axios.get("/Role/GetRolePower", {
+    return axios.get("/Role/GetRolePowerButton", {
         params
     })
+}
+export function GetRolePower() {
+    return axios.get("/Role/GetRolePower")
 }

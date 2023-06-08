@@ -62,7 +62,7 @@
     </div>
 </template>
 <script>
-import { GetRoleAll, LogicDeleteAsyncRole, GetRolePower } from "@/api/role"
+import { GetRoleAll, LogicDeleteAsyncRole, GetRolePowerButton } from "@/api/role"
 import RoleCreate from "@/views/Role/RoleCreate.vue"
 import RoleEdit from "@/views/Role/RoleEdit.vue"
 import RolePrivileges from "./RolePrivileges.vue"
@@ -127,7 +127,7 @@ export default {
             this.GetRole();
         },
         GetRolePowerButton() {
-            GetRolePower({
+            GetRolePowerButton({
                 id: Number(this.$ls.get("UserId")),
                 state: 3
             }).then(d => {
