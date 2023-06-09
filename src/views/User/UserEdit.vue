@@ -146,7 +146,7 @@ export default Vue.extend({
             this.dialogVisible = true;
         },
         handleAvatarSuccess(res, file) {
-            console.log(res.message)
+            // console.log(res.message)
             if (res.result != 200) {
                 this.$message.error(res.message);
                 return;
@@ -156,7 +156,6 @@ export default Vue.extend({
         //修改用户信息
         UpdateUserInfo(formName) {
             this.$refs[formName].validate((valid) => {
-                debugger
                 if (valid) {
                     UpdateUser(this.ruleForm).then(d => {
                         if (d.result == 200) {
@@ -177,14 +176,14 @@ export default Vue.extend({
             });
         },
         EditUser(id) {
-            console.log(id);
+            // console.log(id);
             axios({
                 method: "get",
                 url: "/User/EditUser?id=" + id
             }).then(d => {
 
                 this.ruleForm = d.data;
-                console.log(d.data.roleIdAll)
+                // console.log(d.data.roleIdAll)
                 // this.ruleForm.roleIds = [];
                 let roleids = [];
                 d.data.roleIdAll.forEach(item => {
@@ -196,7 +195,7 @@ export default Vue.extend({
                     roleids.push(idpush)
                 })
                 this.ruleForm.roleIds = roleids;
-                console.log(roleids)
+                // console.log(roleids)
             })
         },
         resetForm(formName) {
@@ -213,15 +212,14 @@ export default Vue.extend({
         GetValue(val) {
             this.ruleForm.roleId = [];
             this.ruleForm.roleIdAll = [];
-            console.log(val);
-            debugger
+            // console.log(val);
             val.forEach(item => {
                 var index = item.length;
                 this.ruleForm.roleId.push(item[index - 1])
                 this.ruleForm.roleIdAll.push(item.toString());
-                console.log(item);
+                // console.log(item);
             })
-            console.log(this.ruleForm.roleId);
+            // console.log(this.ruleForm.roleId);
         }
     },
     created() {

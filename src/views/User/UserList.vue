@@ -161,7 +161,6 @@ export default {
     GetUserList() {
       // console.log(Object.assign({}, this.page, this.form))
       GetUserInfoPage(this.page).then(d => {
-        // debugger
         this.userlist = d.data;
         this.page.total = d.total;
       }).catch(err => {

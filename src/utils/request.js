@@ -10,7 +10,6 @@ axios.defaults.baseURL = process.env.VUE_APP_BASEURL + "/api"
 
 axios.interceptors.request.use(function (config) {
 
-    // debugger
     config.headers['Authorization'] = `${Vue.ls.get('token')}`
     return config;
 }, function (error) {
@@ -40,7 +39,6 @@ export function GetNewToken(config) {
 }
 axios.interceptors.response.use(
     response => {
-        // debugger
         const res = response.data;
         if (res.result === 500) {
             console.log(response.config)

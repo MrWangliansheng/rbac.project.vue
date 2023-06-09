@@ -1,7 +1,6 @@
 import axios from "@/utils/request"
 
 export function GetRoleAll(params) {
-    // debugger
     return axios({
         method: "get",
         url: '/Role/GetRole',
@@ -37,7 +36,6 @@ export function UpdateRole(data) {
 }
 
 export function GetRolePowerButton(params) {
-    debugger
     return axios.get("/Role/GetRolePowerButton", {
         params
     })

@@ -9,8 +9,8 @@
                 </el-col>
                 <el-col :span="12" :offset="0">
                     <el-form-item label="上级菜单" prop="powerParentId">
-                        <el-cascader :options="powerlist" v-model="ruleForm.powerParentId" :props="{ checkStrictly: true }"
-                            clearable></el-cascader>
+                        <el-cascader :options="powerlist" :disabled="true" v-model="ruleForm.powerParentId"
+                            :props="{ checkStrictly: true }" clearable></el-cascader>
                         <!-- :show-all-levels="false" -->
                     </el-form-item>
                 </el-col>
@@ -30,12 +30,14 @@
             </el-row>
             <el-row :gutter="20">
                 <el-col :span="12" :offset="0">
-                    <el-form-item label="接口URL" prop="powerAPIUrl">
-                        <el-input v-model="ruleForm.powerAPIUrl"></el-input>
+                    <el-form-item label="路由名称" prop="routeName">
+                        <el-input v-model="ruleForm.routeName"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12" :offset="0">
-
+                    <el-form-item label="接口URL" prop="powerAPIUrl">
+                        <el-input v-model="ruleForm.powerAPIUrl"></el-input>
+                    </el-form-item>
                 </el-col>
             </el-row>
             <el-row :gutter="20">
@@ -89,6 +91,7 @@ export default {
                 powerIcon: "",
                 powerRedirect: "",
                 powerAPIUrl: "",
+                routeName: "",
             },
             rules: {
                 powerName: [
@@ -111,14 +114,17 @@ export default {
                 ],
                 powerIcon: [
                     { required: true, message: '请选择图标', trigger: 'change' }
-                ]
+                ],
+                routeName: [
+                    { required: true, message: '请输入路由名称', trigger: 'blur' }
+                ],
             }
         }
     },
     methods: {
         GetPowerTreeList() {
             GetPowerTree().then(d => {
-                console.log(d.data)
+                // console.log(d.data)
                 this.powerlist = d.data;
             })
         },
@@ -163,7 +169,7 @@ export default {
                 d.data.powerParentIdAll.split(",").forEach(item => {
                     this.ruleForm.powerParentId.push(Number(item))
                 })
-                console.log(d.data)
+                // console.log(d.data)
             })
         }
     },

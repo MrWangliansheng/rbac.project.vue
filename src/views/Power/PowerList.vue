@@ -16,9 +16,15 @@
                 </el-table-column>
                 <el-table-column prop="powerRoute" label="菜单路由"></el-table-column>
                 <el-table-column prop="powerAPIUrl" label="接口路由"></el-table-column>
+                <el-table-column prop="routeName" label="路由名称"></el-table-column>
                 <el-table-column prop="powerRedirect" label="重定向路由"></el-table-column>
                 <el-table-column prop="powerDesc" label="菜单描述"></el-table-column>
-                <el-table-column prop="powerDesc" label="菜单类型"></el-table-column>
+                <el-table-column prop="powerType" label="菜单类型">
+                    <template slot-scope='scope'>
+                        <span v-for="item in typelist" :key="item.id" v-if="scope.row.powerType == item.id">{{ item.name
+                        }}</span>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="powerTime" label="创建日期">
                     <template slot-scope="scope">
                         {{ scope.row.powerTime.replace("T", " ") }}
@@ -62,7 +68,7 @@
     </div>
 </template>
 <script>
-import { GetPowerTreeTableLevelone, LogicDeleteAsync } from "@/api/power"
+import { GetPowerTreeTableLevelone, LogicDeleteAsync, GetPowerEnum } from "@/api/power"
 import PowerCreatre from "./PowerCreatre.vue"
 import PowerEdit from "./PowerEdit.vue"
 import { GetRolePowerButton } from "@/api/role"
@@ -74,6 +80,7 @@ export default {
     name: 'APP',
     data() {
         return {
+            typelist: [],
             buttonlist: [],
             dialogFormVisible: false,
             disbales: 0,
@@ -91,9 +98,9 @@ export default {
             })
         },
         load(tree, treeNode, resolve) {
-            console.log(tree)
-            console.log(treeNode)
-            console.log(resolve)
+            // console.log(tree)
+            // console.log(treeNode)
+            // console.log(resolve)
         },
         Visible() {
             this.dialogFormVisible = false;
@@ -129,11 +136,17 @@ export default {
             }).catch(error => {
                 console.log(error)
             })
-        }
+        },
+        GetPowerEnumList() {
+            GetPowerEnum().then(d => {
+                this.typelist = d.data;
+            })
+        },
     },
     created() {
         this.GetPowerTreeTableLevel();
         this.GetRolePowerButton();
+        this.GetPowerEnumList();
     },
     mounted() {
     },

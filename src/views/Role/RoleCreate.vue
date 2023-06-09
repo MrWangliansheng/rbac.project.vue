@@ -99,7 +99,7 @@ export default {
         GetValue(val) {
             this.ruleForm.powerId = [];
             this.ruleForm.powerIdAll = [];
-            console.log(val)
+            // console.log(val)
             val.forEach(item => {
                 let index = item.length;
                 this.ruleForm.powerId.push(item[index - 1]);

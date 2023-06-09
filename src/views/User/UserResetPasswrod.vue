@@ -35,7 +35,7 @@ export default {
         //重置用户密码
         ResetUserPasswrod() {
 
-            console.log(this.ruleForm);
+            // console.log(this.ruleForm);
             this.$confirm('确定提交操作吗？若未输入重置密码默认为123456, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',

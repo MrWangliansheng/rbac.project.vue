@@ -119,7 +119,7 @@ export default {
     methods: {
         GetPowerTreeList() {
             GetPowerTree().then(d => {
-                console.log(d.data)
+                // console.log(d.data)
                 this.powerlist = d.data;
             })
         },

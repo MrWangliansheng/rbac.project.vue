@@ -73,7 +73,6 @@ export default {
                     } else {
                         this.ruleForm.roleParentId = 0;
                     }
-                    debugger
                     UpdateRole(this.ruleForm).then(d => {
                         if (d.result == 200) {
                             this.$message.success(d.message);
